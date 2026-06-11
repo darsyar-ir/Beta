@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>درسیار | نسخه نهایی ۰.۸۵ | پنل ادمین فوق حرفه‌ای</title>
+    <title>درسیار | سامانه مدیریت محتوای آموزشی</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -26,7 +26,6 @@
             --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
             --shadow-md: 0 8px 24px rgba(0,0,0,0.1);
             --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
-            --shadow-xl: 0 24px 64px rgba(0,0,0,0.15);
         }
         body { font-family: 'Vazirmatn', sans-serif; background: linear-gradient(145deg, #f0f4f8 0%, #e8edf5 100%); color: var(--dark); min-height: 100vh; }
         ::-webkit-scrollbar { width: 8px; }
@@ -91,7 +90,6 @@
         @media (max-width: 768px) { .container { padding: 0 16px; } .content-grid { grid-template-columns: 1fr; } .hero-banner { padding: 24px; } .grade-btn { padding: 8px 20px; font-size: 13px; } .tab-btn { padding: 10px 16px; font-size: 13px; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .content-card { animation: fadeInUp 0.5s ease backwards; }
-        /* استایل‌های پنل ادمین */
         .admin-stat-card { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 20px; padding: 20px; text-align: center; color: white; transition: transform 0.2s; cursor: pointer; }
         .admin-stat-card:hover { transform: translateY(-3px); }
         .admin-stat-number { font-size: 32px; font-weight: 800; }
@@ -104,6 +102,8 @@
         th, td { padding: 12px; text-align: right; border-bottom: 1px solid var(--gray-light); }
         th { background: var(--primary); color: white; border-radius: 12px; }
         input, select, textarea { padding: 10px 14px; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; }
+        .empty-state { text-align: center; padding: 80px 20px; background: white; border-radius: 28px; }
+        .empty-state i { font-size: 64px; color: var(--gray-light); margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -114,10 +114,11 @@
             <div class="logo">
                 <span class="logo-icon">🎓</span>
                 <h1>درسیار</h1>
-                <span class="logo-badge">نسخه نهایی ۰.۸۵</span>
+                <span class="logo-badge">سامانه مدیریت محتوا</span>
             </div>
             <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <button class="btn btn-outline" id="searchBtn"><i class="fas fa-search"></i> جستجو</button>
+                <button class="btn btn-secondary" id="adminBtn"><i class="fas fa-crown"></i> 🛠️ پنل مدیریت</button>
                 <div class="user-panel">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div class="user-avatar" id="userAvatar">👤</div>
@@ -127,7 +128,6 @@
                         </div>
                     </div>
                     <button class="btn btn-primary" id="authBtn" style="padding: 6px 18px;">ورود</button>
-                    <button class="btn btn-secondary" id="adminBtn" style="padding: 6px 18px;"><i class="fas fa-crown"></i> مدیریت</button>
                 </div>
             </div>
         </div>
@@ -150,35 +150,26 @@
 
 <div class="footer">
     <p style="font-size: 16px; font-weight: 600;">© ۱۴۰۳ درسیار | پلتفرم رسمی آموزش ایران</p>
-    <p style="font-size: 14px; margin-top: 8px; opacity: 0.9;">خیام | خرداد ۱۴۰۵</p>
-    <p style="font-size: 12px; margin-top: 12px; opacity: 0.7;">نسخه نهایی ۰.۸۵ - پنل ادمین فوق حرفه‌ای</p>
+    <p style="font-size: 14px; margin-top: 8px; opacity: 0.9;">نسخه حرفه‌ای - مدیریت کامل محتوا</p>
 </div>
 
 <script>
-    // ============ دیتابیس کامل نسخه ۰.۸۵ ============
+    // ============ دیتابیس خام - بدون محتوای اولیه ============
     let DB = {
         grades: ['هفتم', 'هشتم', 'نهم'],
         subjects: ['ریاضی', 'فیزیک', 'شیمی', 'علوم', 'ادبیات', 'زبان انگلیسی', 'عربی', 'دینی', 'اجتماعی', 'هنر', 'برنامه‌نویسی'],
         sections: ['📚 جزوه', '📖 کتاب', '📝 نمونه سوال', '🎯 آزمون', '🎬 فیلم آموزشی', '🖼️ گالری', '💎 نکات طلایی', '⭐ سوالات ویژه'],
         contents: {},
-        gallery: [
-            { id: 'g1', type: 'image', url: 'https://picsum.photos/id/20/500/350', caption: 'فضای آموزشی مدرن', likes: 245, date: '۱۴۰۳/۱۰/۰۵' },
-            { id: 'g2', type: 'gif', url: 'https://media4.giphy.com/media/LmNwrBhejkK9EFP504/giphy.gif', caption: 'یادگیری تعاملی', likes: 512, date: '۱۴۰۳/۱۰/۰۶' },
-            { id: 'g3', type: 'image', url: 'https://picsum.photos/id/26/500/350', caption: 'کتابخانه مرکزی', likes: 187, date: '۱۴۰۳/۱۰/۰۷' },
-            { id: 'g4', type: 'image', url: 'https://picsum.photos/id/42/500/350', caption: 'همایش اساتید', likes: 324, date: '۱۴۰۳/۱۰/۰۸' }
-        ],
+        gallery: [],
         users: [
-            { id: 'u1', username: 'aria', password: '1389', verified: true, role: 'admin', coins: 10000, avatar: '👑', email: 'admin@drsyar.com', phone: '09123456789', registerDate: '۱۴۰۳/۰۱/۰۱', level: 'طلایی', lastLogin: '۱۴۰۳/۱۰/۱۵', totalPurchases: 0, totalSpent: 0 },
-            { id: 'u2', username: 'sara', password: '123', verified: true, role: 'teacher', coins: 2500, avatar: '👩‍🏫', email: 'sara@drsyar.com', phone: '09123456788', registerDate: '۱۴۰۳/۰۱/۱۵', level: 'نقره‌ای', lastLogin: '۱۴۰۳/۱۰/۱۴', totalPurchases: 5, totalSpent: 250 },
-            { id: 'u3', username: 'reza', password: '123', verified: false, role: 'student', coins: 500, avatar: '👨‍🎓', email: 'reza@drsyar.com', phone: '09123456787', registerDate: '۱۴۰۳/۰۲/۰۱', level: 'برنزی', lastLogin: '۱۴۰۳/۱۰/۱۰', totalPurchases: 2, totalSpent: 80 }
+            { id: 'u1', username: 'admin', password: 'admin123', verified: true, role: 'admin', coins: 10000, avatar: '👑', email: 'admin@drsyar.com', phone: '09123456789', registerDate: '۱۴۰۳/۰۱/۰۱', level: 'طلایی', lastLogin: '۱۴۰۳/۱۰/۱۵', totalPurchases: 0, totalSpent: 0 }
         ],
-        categories: ['ریاضی', 'فیزیک', 'شیمی', 'علوم', 'ادبیات', 'زبان انگلیسی', 'عربی', 'دینی', 'اجتماعی', 'هنر', 'برنامه‌نویسی'],
-        adminPass: 'Arian1389',
-        announcement: { text: '🌟 به درسیار نسخه نهایی ۰.۸۵ خوش آمدید! 🌟 | پنل ادمین فوق حرفه‌ای | مدیریت کامل کاربران و محتوا | خرداد ۱۴۰۵', date: 'خرداد ۱۴۰۵' },
-        stats: { totalViews: 125840, totalDownloads: 45670, totalComments: 3892, totalSales: 12500, totalIncome: 245000 }
+        adminPass: 'admin123',
+        announcement: { text: '🌟 به سامانه درسیار خوش آمدید! 🌟 | برای افزودن محتوا از پنل مدیریت استفاده کنید.', date: 'درسیار' },
+        stats: { totalViews: 0, totalDownloads: 0, totalComments: 0, totalSales: 0, totalIncome: 0 }
     };
 
-    // مقداردهی محتوا با درس‌های مختلف
+    // مقداردهی اولیه ساختار محتوا (خالی)
     for(let g of DB.grades) {
         DB.contents[g] = {};
         for(let s of DB.sections) {
@@ -186,36 +177,23 @@
         }
     }
 
-    // محتوای کامل با درس‌های مختلف
-    DB.contents['هفتم']['📚 جزوه'] = [
-        { id: 'c1', title: 'جزوه تخصصی ریاضی هفتم - اعداد صحیح', desc: 'بیش از ۱۲۰ تمرین حل شده + فیلم آموزشی', link: '#', subject: 'ریاضی', rating: 4.9, views: 5640, downloads: 2340, comments: [], teacher: 'استاد احمدی', price: 50, discount: 0, salesCount: 120 },
-        { id: 'c2', title: 'جزوه طلایی فیزیک هفتم - مقدمات', desc: 'مناسب برای تیزهوشان', link: '#', subject: 'فیزیک', rating: 4.8, views: 3420, downloads: 1250, comments: [], teacher: 'استاد کریمی', price: 80, discount: 0, salesCount: 45 },
-        { id: 'c3', title: 'جزوه کامل علوم تجربی', desc: 'فصل به فصل با نکات کلیدی', link: '#', subject: 'علوم', rating: 4.7, views: 4210, downloads: 1870, comments: [], teacher: 'دکتر رضایی', price: 40, discount: 10, salesCount: 89 }
-    ];
-    DB.contents['هفتم']['🎬 فیلم آموزشی'] = [
-        { id: 'c4', title: 'تدریس مفهومی ریاضی - فصل هندسه', desc: '۲ ساعت فیلم با کیفیت 4K', link: '#', subject: 'ریاضی', rating: 4.9, views: 3210, downloads: 1100, comments: [], teacher: 'استاد محمدی', price: 100, discount: 0, salesCount: 67 }
-    ];
-    DB.contents['هشتم']['📝 نمونه سوال'] = [
-        { id: 'c5', title: 'سوالات نوبت اول فیزیک هشتم', desc: 'همراه با پاسخنامه تشریحی', link: '#', subject: 'فیزیک', rating: 4.8, views: 4320, downloads: 1870, comments: [], teacher: 'دکتر رضایی', price: 30, discount: 0, salesCount: 210 }
-    ];
-    DB.contents['هشتم']['💎 نکات طلایی'] = [
-        { id: 'c6', title: 'نکات طلایی شیمی هشتم - جدول تناوبی', desc: 'جمع‌بندی نهایی', link: '#', subject: 'شیمی', rating: 4.9, views: 2890, downloads: 980, comments: [], teacher: 'استاد کریمی', price: 60, discount: 15, salesCount: 78 }
-    ];
-    DB.contents['نهم']['🎬 فیلم آموزشی'] = [
-        { id: 'c7', title: 'تدریس جامع فیزیک نهم - حرکت و نیرو', desc: '۳ ساعت فیلم با کیفیت 4K', link: '#', subject: 'فیزیک', rating: 4.9, views: 6780, downloads: 2910, comments: [], teacher: 'استاد محمدیان', price: 120, discount: 20, salesCount: 134 }
-    ];
-    DB.contents['نهم']['⭐ سوالات ویژه'] = [
-        { id: 'c8', title: 'سوالات ویژه تیزهوشان - ریاضی', desc: '۱۰۰ سوال منتخب', link: '#', subject: 'ریاضی', rating: 5.0, views: 2340, downloads: 890, comments: [], teacher: 'گروه تیزهوشان', price: 150, discount: 0, salesCount: 45 }
-    ];
-
     let currentUser = null;
     let currentGrade = 'هفتم';
     let currentSection = '📚 جزوه';
     let currentFilter = 'all';
     let currentSubject = 'all';
 
-    function save() { localStorage.setItem('drsyar_v085_final', JSON.stringify(DB)); if(currentUser) localStorage.setItem('drsyar_user_v085_final', JSON.stringify({ username: currentUser.username })); }
-    function load() { let d = localStorage.getItem('drsyar_v085_final'); if(d) DB = JSON.parse(d); let u = localStorage.getItem('drsyar_user_v085_final'); if(u) { let userData = JSON.parse(u); currentUser = DB.users.find(x => x.username === userData.username) || null; } }
+    function save() { localStorage.setItem('drsyar_empty', JSON.stringify(DB)); if(currentUser) localStorage.setItem('drsyar_user_empty', JSON.stringify({ username: currentUser.username })); }
+    function load() { 
+        let d = localStorage.getItem('drsyar_empty'); 
+        if(d) DB = JSON.parse(d); 
+        else save();
+        let u = localStorage.getItem('drsyar_user_empty'); 
+        if(u) { 
+            let userData = JSON.parse(u); 
+            currentUser = DB.users.find(x => x.username === userData.username) || null; 
+        } 
+    }
     function toast(msg, isError = false) { let t = document.createElement('div'); t.className = 'toast'; t.style.background = isError ? 'var(--danger)' : 'var(--primary-dark)'; t.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 2800); }
     function canAccessVip() { return currentUser && currentUser.verified === true; }
     function hasEnoughCoins(price) { return currentUser && currentUser.coins >= price; }
@@ -268,7 +246,7 @@
             let results = searchContent(e.target.value);
             let resultsDiv = document.getElementById('searchResults');
             if(results.length === 0) resultsDiv.innerHTML = '<div style="text-align:center;padding:48px;"><i class="fas fa-search" style="font-size:48px;opacity:0.5;"></i><p style="margin-top:12px;">نتیجه‌ای یافت نشد</p></div>';
-            else resultsDiv.innerHTML = results.map(r => `<div style="padding:14px;border-bottom:1px solid #ddd;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'" onclick="selectSearchResult('${r.grade}','${r.section}')"><strong>${r.title}</strong><div style="font-size:12px;color:gray;">${r.grade} - ${r.subject || 'عمومی'} - ${r.price || 0} سکه</div></div>`).join('');
+            else resultsDiv.innerHTML = results.map(r => `<div style="padding:14px;border-bottom:1px solid #ddd;cursor:pointer;" onclick="selectSearchResult('${r.grade}','${r.section}')"><strong>${r.title}</strong><div style="font-size:12px;color:gray;">${r.grade} - ${r.subject || 'عمومی'} - ${r.price || 0} سکه</div></div>`).join('');
         });
         input.focus();
     }
@@ -334,11 +312,11 @@
         if(currentFilter === 'free') filtered = filtered.filter(i => (i.price - (i.price * (i.discount||0)/100)) === 0);
         
         if(filtered.length === 0) {
-            document.getElementById('mainContent').innerHTML = `<div style="background:white;border-radius:28px;text-align:center;padding:80px;"><i class="fas fa-book-open" style="font-size:64px;color:var(--gray-light);"></i><p style="margin-top:20px;">محتوایی یافت نشد</p><button class="btn-primary" onclick="toast('به زودی اضافه می‌شود')">درخواست محتوا</button></div>`;
+            document.getElementById('mainContent').innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p style="margin-top:20px; color:var(--gray);">هیچ محتوایی در این دسته وجود ندارد</p><button class="btn-primary" onclick="document.getElementById('adminBtn').click()"><i class="fas fa-plus"></i> افزودن محتوا از پنل مدیریت</button></div>`;
             return;
         }
         
-        let html = `<div class="content-grid">${filtered.map(item => {
+        let html = `<div class="content-grid">${filtered.map((item, idx) => {
             let locked = item.vip && !canAccessVip();
             let finalPrice = item.price - (item.price * (item.discount || 0) / 100);
             return `
@@ -348,18 +326,18 @@
                     <h3 class="card-title">${item.title}</h3>
                     <p class="card-desc">${item.desc}</p>
                     <div class="card-meta">
-                        <span><i class="fas fa-eye"></i> ${item.views}</span>
-                        <span><i class="fas fa-download"></i> ${item.downloads}</span>
+                        <span><i class="fas fa-eye"></i> ${item.views || 0}</span>
+                        <span><i class="fas fa-download"></i> ${item.downloads || 0}</span>
                         <span><i class="fas fa-chalkboard-user"></i> ${item.teacher || 'درسیار'}</span>
                         <span class="price-tag"><i class="fas fa-coins"></i> ${finalPrice} سکه</span>
                     </div>
                     <div class="rating-area">
-                        <div class="stars" data-id="${item.id}">${[1,2,3,4,5].map(s => `<i class="fa-${item.rating >= s ? 'solid' : 'regular'} fa-star" data-star="${s}"></i>`).join('')}</div>
-                        <span>${item.rating}</span>
+                        <div class="stars" data-id="${item.id}">${[1,2,3,4,5].map(s => `<i class="fa-${(item.rating || 0) >= s ? 'solid' : 'regular'} fa-star" data-star="${s}"></i>`).join('')}</div>
+                        <span>${item.rating || 0}</span>
                     </div>
                     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                         ${!locked ? `
-                            <button class="btn-primary" onclick="purchaseAndView('${currentGrade}','${currentSection}',${filtered.indexOf(item)})"><i class="fas fa-shopping-cart"></i> خرید با ${finalPrice} سکه</button>
+                            <button class="btn-primary" onclick="purchaseAndView('${currentGrade}','${currentSection}',${idx})"><i class="fas fa-shopping-cart"></i> خرید با ${finalPrice} سکه</button>
                         ` : `<button class="btn-primary" disabled style="opacity:0.6"><i class="fas fa-lock"></i> قفل شده - ویژه اعضا</button>`}
                     </div>
                 </div>
@@ -376,9 +354,9 @@
                     for(let g of DB.grades) {
                         for(let s of DB.sections) {
                             if(DB.contents[g] && DB.contents[g][s]) {
-                                let idx = DB.contents[g][s].findIndex(x => x.id === id);
-                                if(idx !== -1) {
-                                    DB.contents[g][s][idx].rating = val;
+                                let idx2 = DB.contents[g][s].findIndex(x => x.id === id);
+                                if(idx2 !== -1) {
+                                    DB.contents[g][s][idx2].rating = val;
                                     save();
                                     render();
                                     toast(`امتیاز ${val} ثبت شد`);
@@ -395,11 +373,16 @@
     window.purchaseAndView = (grade, section, idx) => {
         let item = DB.contents[grade][section][idx];
         if(purchaseContent(item, grade, section)) {
-            window.open(item.link, '_blank');
+            if(item.link && item.link !== '#') window.open(item.link, '_blank');
+            else toast('لینک محتوا در دسترس نیست');
         }
     };
 
     function renderGallery() {
+        if(DB.gallery.length === 0) {
+            document.getElementById('mainContent').innerHTML = `<div class="empty-state"><i class="fas fa-images"></i><p style="margin-top:20px;">گالری خالی است</p><button class="btn-primary" onclick="document.getElementById('adminBtn').click()">افزودن تصویر از پنل مدیریت</button></div>`;
+            return;
+        }
         document.getElementById('mainContent').innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px;">${DB.gallery.map(g => `
             <div style="background:white;border-radius:24px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.open('${g.url}','_blank')">
                 ${g.type === 'gif' ? `<video autoplay loop muted playsinline src="${g.url}" style="width:100%;height:220px;object-fit:cover;"></video>` : `<img src="${g.url}" style="width:100%;height:220px;object-fit:cover;">`}
@@ -414,7 +397,7 @@
     document.getElementById('searchBtn').onclick = () => showSearchModal();
     
     document.getElementById('authBtn').onclick = () => {
-        if(currentUser) { currentUser = null; localStorage.removeItem('drsyar_user_v085_final'); toast('خارج شدید'); render(); return; }
+        if(currentUser) { currentUser = null; localStorage.removeItem('drsyar_user_empty'); toast('خارج شدید'); render(); return; }
         let action = prompt('🔐 درسیار\n\n1️⃣ ورود\n2️⃣ ثبت‌نام\n\nلطفاً شماره را وارد کنید:');
         if(action === '2') {
             let un = prompt('نام کاربری:');
@@ -443,7 +426,7 @@
         }
     };
 
-    // ============ پنل ادمین فوق حرفه‌ای ============
+    // ============ پنل ادمین کامل ============
     document.getElementById('adminBtn').onclick = () => {
         let pass = prompt('🔐 رمز مدیریت را وارد کنید:');
         if(pass !== DB.adminPass) { toast('رمز مدیریت اشتباه است', true); return; }
@@ -456,7 +439,7 @@
         modal.innerHTML = `
             <div class="admin-panel">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-                    <h2 style="color:var(--primary);"><i class="fas fa-crown" style="color:var(--secondary);"></i> پنل مدیریت فوق حرفه‌ای درسیار <span style="font-size:12px;background:var(--secondary);padding:4px 12px;border-radius:100px;">نسخه ۰.۸۵ نهایی</span></h2>
+                    <h2 style="color:var(--primary);"><i class="fas fa-crown" style="color:var(--secondary);"></i> پنل مدیریت درسیار</h2>
                     <button class="btn-outline" onclick="this.closest('.admin-modal').remove()">✖ بستن</button>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;" id="adminStats"></div>
@@ -471,11 +454,10 @@
             { id: 'announce', name: '📢 اعلانات', icon: 'fas fa-bullhorn' },
             { id: 'users', name: '👥 کاربران', icon: 'fas fa-users' },
             { id: 'coins', name: '💰 مدیریت سکه', icon: 'fas fa-coins' },
-            { id: 'content', name: '📚 محتوا', icon: 'fas fa-book' },
+            { id: 'content', name: '📚 مدیریت محتوا', icon: 'fas fa-book' },
             { id: 'discounts', name: '🏷️ تخفیف‌ها', icon: 'fas fa-tag' },
             { id: 'subjects', name: '📚 دروس', icon: 'fas fa-flask' },
             { id: 'gallery', name: '🖼️ گالری', icon: 'fas fa-images' },
-            { id: 'reports', name: '📊 گزارشات', icon: 'fas fa-chart-bar' },
             { id: 'settings', name: '⚙️ تنظیمات', icon: 'fas fa-cog' }
         ];
         
@@ -493,7 +475,6 @@
                 <div class="admin-stat-card"><div class="admin-stat-number">${totalCoins.toLocaleString('fa-IR')}</div><div>💰 کل سکه‌ها</div></div>
                 <div class="admin-stat-card"><div class="admin-stat-number">${DB.stats.totalIncome.toLocaleString('fa-IR')}</div><div>💎 درآمد کل</div></div>
                 <div class="admin-stat-card"><div class="admin-stat-number">${DB.gallery.length}</div><div>🖼️ گالری</div></div>
-                <div class="admin-stat-card"><div class="admin-stat-number">${DB.stats.totalViews.toLocaleString('fa-IR')}</div><div>👁️ بازدیدها</div></div>
             `;
         }
         
@@ -501,18 +482,25 @@
             let contentDiv = document.getElementById('adminTabContent');
             
             if(tab === 'dashboard') {
-                let totalContent = 0;
-                for(let g of DB.grades) for(let s of DB.sections) if(DB.contents[g]?.[s]) totalContent += DB.contents[g][s].length;
-                let topUsers = [...DB.users].sort((a,b) => b.totalSpent - a.totalSpent).slice(0,5);
-                contentDiv.innerHTML = `
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:24px;">
-                        <div style="background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:20px;padding:24px;color:white;"><i class="fas fa-users" style="font-size:48px;"></i><div style="font-size:32px;font-weight:800;margin-top:12px;">${DB.users.length}</div><div>کاربران فعال</div></div>
-                        <div style="background:linear-gradient(135deg,var(--secondary),var(--secondary-dark));border-radius:20px;padding:24px;color:white;"><i class="fas fa-book" style="font-size:48px;"></i><div style="font-size:32px;font-weight:800;margin-top:12px;">${totalContent}</div><div>محتوای آموزشی</div></div>
-                        <div style="background:linear-gradient(135deg,var(--success),#1b5e20);border-radius:20px;padding:24px;color:white;"><i class="fas fa-chart-line" style="font-size:48px;"></i><div style="font-size:32px;font-weight:800;margin-top:12px;">${DB.stats.totalIncome.toLocaleString('fa-IR')}</div><div>درآمد کل (سکه)</div></div>
-                        <div style="background:linear-gradient(135deg,var(--warning),#e65100);border-radius:20px;padding:24px;color:white;"><i class="fas fa-eye" style="font-size:48px;"></i><div style="font-size:32px;font-weight:800;margin-top:12px;">${DB.stats.totalViews.toLocaleString('fa-IR')}</div><div>کل بازدیدها</div></div>
-                    </div>
-                    <div style="background:var(--gray-light);border-radius:20px;padding:20px;margin-top:20px;"><h3>🏆 کاربران برتر (بیشترین خرید)</h3><table style="width:100%;margin-top:16px;"><tr><th>کاربر</th><th>تعداد خرید</th><th>کل هزینه</th></tr>${topUsers.map(u => `<tr><td>${u.username} ${u.level}</td><td>${u.totalPurchases || 0}</td><td>${(u.totalSpent || 0).toLocaleString('fa-IR')} سکه</td></tr>`).join('')}</table></div>
-                `;
+                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;">
+                    <h3>📊 خوش آمدید به پنل مدیریت</h3>
+                    <p style="margin-top:16px;">از طریق تب‌های بالا می‌توانید محتوا، کاربران، گالری و سایر بخش‌ها را مدیریت کنید.</p>
+                    <hr style="margin:20px 0;">
+                    <h4>🔑 اطلاعات ورود:</h4>
+                    <ul style="margin-top:12px;padding-right:20px;">
+                        <li><strong>نام کاربری ادمین:</strong> admin</li>
+                        <li><strong>رمز عبور ادمین:</strong> admin123</li>
+                        <li><strong>رمز پنل مدیریت:</strong> admin123</li>
+                    </ul>
+                    <hr style="margin:20px 0;">
+                    <h4>📌 راهنمای سریع:</h4>
+                    <ul style="margin-top:12px;padding-right:20px;">
+                        <li>برای افزودن محتوا به تب <strong>مدیریت محتوا</strong> بروید</li>
+                        <li>برای افزودن تصویر به گالری به تب <strong>گالری</strong> بروید</li>
+                        <li>برای مدیریت کاربران به تب <strong>کاربران</strong> بروید</li>
+                        <li>برای تغییر رمز مدیریت به تب <strong>تنظیمات</strong> بروید</li>
+                    </ul>
+                </div>`;
             }
             else if(tab === 'announce') {
                 contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><h3>📢 ویرایش اعلان اصلی</h3><textarea id="annText" rows="3" style="width:100%;padding:12px;border-radius:16px;margin:16px 0;">${DB.announcement.text}</textarea><input type="text" id="annDate" value="${DB.announcement.date}" style="padding:10px;border-radius:12px;"><button class="btn-primary" onclick="saveAnnounce()" style="margin-top:16px;">💾 ذخیره</button></div>`;
@@ -524,14 +512,14 @@
                 window.renderUsersList = () => {
                     document.getElementById('usersListAdmin').innerHTML = DB.users.map(u => `
                         <div class="user-row">
-                            <div><span style="font-size:28px;">${u.avatar}</span><div><strong>${u.username}</strong><br><small><i class="fas fa-envelope"></i> ${u.email || 'ندارد'} | <i class="fas fa-phone"></i> ${u.phone || 'ندارد'}</small><br><small>عضویت: ${u.registerDate} | آخرین ورود: ${u.lastLogin || 'نامشخص'}</small></div></div>
+                            <div><span style="font-size:28px;">${u.avatar}</span><div><strong>${u.username}</strong><br><small><i class="fas fa-envelope"></i> ${u.email || 'ندارد'} | <i class="fas fa-phone"></i> ${u.phone || 'ندارد'}</small><br><small>عضویت: ${u.registerDate}</small></div></div>
                             <div><span class="price-tag"><i class="fas fa-coins"></i> ${u.coins} سکه</span><br>${u.verified ? '✅ تایید شده' : '⏳ در انتظار'}<br>سطح: ${u.level}</div>
                             <div><button class="btn-primary" onclick="toggleVerifyUser('${u.id}')">${u.verified ? 'لغو' : 'تایید'}</button><button class="btn-danger" onclick="deleteUserAdmin('${u.id}')" style="margin-right:8px;">🗑 حذف</button></div>
                         </div>
                     `).join('');
                 };
                 window.toggleVerifyUser = (id) => { let u = DB.users.find(x=>x.id===id); if(u) { u.verified = !u.verified; save(); renderUsersList(); updateAdminStats(); toast(`${u.username} ${u.verified ? 'تایید شد' : 'تایید لغو شد'}`); } };
-                window.deleteUserAdmin = (id) => { if(confirm('حذف شود؟')) { DB.users = DB.users.filter(x=>x.id!==id); save(); renderUsersList(); updateAdminStats(); toast('کاربر حذف شد'); } };
+                window.deleteUserAdmin = (id) => { if(confirm('حذف شود؟')) { DB.users = DB.users.filter(x=>x.id!==id); if(currentUser && currentUser.id === id) currentUser = null; save(); renderUsersList(); updateAdminStats(); toast('کاربر حذف شد'); if(currentUser === null) render(); } };
                 window.addNewUserAdmin = () => {
                     let un = document.getElementById('newUser').value, pw = document.getElementById('newPass').value, em = document.getElementById('newEmail').value, ph = document.getElementById('newPhone').value, lvl = document.getElementById('newLevel').value;
                     if(un && pw) { 
@@ -546,29 +534,57 @@
                 contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><h3>💰 مدیریت سکه کاربران</h3><div id="coinsList"></div></div>`;
                 let coinsHtml = DB.users.map(u => `<div class="user-row"><div><strong>${u.username}</strong> (${u.level})<br><small>${u.email || ''}</small></div><div><span style="font-size:20px;color:var(--secondary);"><i class="fas fa-coins"></i> ${u.coins} سکه</span><br>خرید: ${u.totalPurchases || 0} عدد</div><div class="coin-input-group"><input type="number" id="coinAmt_${u.id}" placeholder="مقدار" style="width:80px;"><button class="btn-success" onclick="addCoinsToUser('${u.id}')">➕ افزودن</button><button class="btn-danger" onclick="removeCoinsFromUser('${u.id}')">➖ کم کردن</button><button class="btn-primary" onclick="setCoinsForUser('${u.id}')">⚙️ تنظیم</button></div></div>`).join('');
                 document.getElementById('coinsList').innerHTML = coinsHtml;
-                window.addCoinsToUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt) { u.coins += amt; save(); toast(`${amt} سکه به ${u.username} اضافه شد`); loadAdminTab('coins'); updateAdminStats(); } };
-                window.removeCoinsFromUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt && u.coins >= amt) { u.coins -= amt; save(); toast(`${amt} سکه از ${u.username} کم شد`); loadAdminTab('coins'); updateAdminStats(); } else toast('سکه کافی نیست', true); };
-                window.setCoinsForUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt && amt >= 0) { u.coins = amt; save(); toast(`سکه ${u.username} به ${amt} تنظیم شد`); loadAdminTab('coins'); updateAdminStats(); } };
+                window.addCoinsToUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt) { u.coins += amt; save(); toast(`${amt} سکه به ${u.username} اضافه شد`); loadAdminTab('coins'); updateAdminStats(); if(currentUser && currentUser.id === id) render(); } };
+                window.removeCoinsFromUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt && u.coins >= amt) { u.coins -= amt; save(); toast(`${amt} سکه از ${u.username} کم شد`); loadAdminTab('coins'); updateAdminStats(); if(currentUser && currentUser.id === id) render(); } else toast('سکه کافی نیست', true); };
+                window.setCoinsForUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt && amt >= 0) { u.coins = amt; save(); toast(`سکه ${u.username} به ${amt} تنظیم شد`); loadAdminTab('coins'); updateAdminStats(); if(currentUser && currentUser.id === id) render(); } };
             }
             else if(tab === 'content') {
-                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;"><select id="cGrade"><option>هفتم</option><option>هشتم</option><option>نهم</option></select><select id="cSection">${DB.sections.filter(s=>s!=='🖼️ گالری').map(s=>`<option>${s}</option>`).join('')}</select><input type="text" id="cTitle" placeholder="عنوان"><input type="text" id="cLink" placeholder="لینک"><select id="cSubject">${DB.subjects.map(c=>`<option>${c}</option>`).join('')}</select><input type="number" id="cPrice" placeholder="قیمت (سکه)" style="width:100px;"><label><input type="checkbox" id="cVip"> ویژه</label><button class="btn-success" onclick="addNewContentAdmin()">➕ افزودن</button></div><div id="contentsListAdmin"></div></div>`;
+                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;"><select id="cGrade"><option>هفتم</option><option>هشتم</option><option>نهم</option></select><select id="cSection">${DB.sections.filter(s=>s!=='🖼️ گالری').map(s=>`<option>${s}</option>`).join('')}</select><input type="text" id="cTitle" placeholder="عنوان" style="min-width:150px;"><input type="text" id="cDesc" placeholder="توضیحات" style="min-width:200px;"><input type="text" id="cLink" placeholder="لینک محتوا" style="min-width:200px;"><select id="cSubject">${DB.subjects.map(c=>`<option>${c}</option>`).join('')}</select><input type="number" id="cPrice" placeholder="قیمت (سکه)" style="width:100px;"><input type="text" id="cTeacher" placeholder="نام مدرس" style="min-width:120px;"><label><input type="checkbox" id="cVip"> ویژه</label><button class="btn-success" onclick="addNewContentAdmin()">➕ افزودن</button></div><div id="contentsListAdmin"></div></div>`;
                 renderContentsList();
                 window.renderContentsList = () => {
-                    let html = '<table><tr style="background:var(--primary);color:white;"><th>پایه</th><th>دسته</th><th>عنوان</th><th>درس</th><th>قیمت</th><th>تخفیف</th><th>فروش</th><th>عملیات</th></tr>';
-                    for(let g of DB.grades) for(let s of DB.sections) if(s !== '🖼️ گالری' && DB.contents[g]?.[s]) DB.contents[g][s].forEach((c, idx) => { html += `<tr><td>${g}</td><td>${s}</td><td>${c.title}</td><td>${c.subject || 'عمومی'}</td><td>${c.price} سکه</td><td>${c.discount||0}%</td><td>${c.salesCount||0}</td><td><button class="btn-warning" onclick="editContent('${g}','${s}',${idx})">✏️ ویرایش</button> <button class="btn-danger" onclick="deleteContentAdmin('${g}','${s}',${idx})">🗑 حذف</button></td></tr>`; });
-                    html += '</table>';
+                    let html = '</table><tr style="background:var(--primary);color:white;"><th>پایه</th><th>دسته</th><th>عنوان</th><th>درس</th><th>مدرس</th><th>قیمت</th><th>تخفیف</th><th>فروش</th><th>عملیات</th></tr>';
+                    for(let g of DB.grades) for(let s of DB.sections) if(s !== '🖼️ گالری' && DB.contents[g]?.[s]) DB.contents[g][s].forEach((c, idx) => { html += `<tr><td>${g} onseline<td>${s} onseline<td>${c.title} onseline<td>${c.subject || 'عمومی'} onseline<td>${c.teacher || 'درسیار'} onseline<td>${c.price} سکه onseline<td>${c.discount||0}% onseline<td>${c.salesCount||0} onseline<td><button class="btn-warning" onclick="editContent('${g}','${s}',${idx})">✏️ ویرایش</button> <button class="btn-danger" onclick="deleteContentAdmin('${g}','${s}',${idx})">🗑 حذف</button></td></tr>`; });
+                    html += ' dorset';
                     document.getElementById('contentsListAdmin').innerHTML = html;
                 };
                 window.addNewContentAdmin = () => {
-                    let g = document.getElementById('cGrade').value, s = document.getElementById('cSection').value, t = document.getElementById('cTitle').value, l = document.getElementById('cLink').value, sub = document.getElementById('cSubject').value, p = parseInt(document.getElementById('cPrice').value)||0, v = document.getElementById('cVip').checked;
-                    if(t && l) { DB.contents[g][s].push({ id: 'c'+Date.now(), title: t, desc: 'محتوای جدید', link: l, vip: v, subject: sub, rating: 0, views: 0, downloads: 0, comments: [], teacher: 'درسیار', price: p, discount: 0, salesCount: 0 }); save(); renderContentsList(); updateAdminStats(); toast('محتوا اضافه شد'); }
-                    else toast('عنوان و لینک الزامی', true);
+                    let g = document.getElementById('cGrade').value, s = document.getElementById('cSection').value, t = document.getElementById('cTitle').value, d = document.getElementById('cDesc').value, l = document.getElementById('cLink').value, sub = document.getElementById('cSubject').value, p = parseInt(document.getElementById('cPrice').value)||0, teacher = document.getElementById('cTeacher').value, v = document.getElementById('cVip').checked;
+                    if(t && l) { 
+                        DB.contents[g][s].push({ 
+                            id: 'c'+Date.now(), 
+                            title: t, 
+                            desc: d || 'بدون توضیحات', 
+                            link: l, 
+                            vip: v, 
+                            subject: sub, 
+                            rating: 0, 
+                            views: 0, 
+                            downloads: 0, 
+                            comments: [], 
+                            teacher: teacher || 'درسیار', 
+                            price: p, 
+                            discount: 0, 
+                            salesCount: 0 
+                        }); 
+                        save(); 
+                        renderContentsList(); 
+                        updateAdminStats(); 
+                        toast('محتوا اضافه شد');
+                        document.getElementById('cTitle').value = '';
+                        document.getElementById('cDesc').value = '';
+                        document.getElementById('cLink').value = '';
+                        document.getElementById('cPrice').value = '';
+                        document.getElementById('cTeacher').value = '';
+                        document.getElementById('cVip').checked = false;
+                    } else toast('عنوان و لینک الزامی', true);
                 };
                 window.editContent = (g,s,idx) => {
                     let newPrice = prompt('قیمت جدید به سکه:', DB.contents[g][s][idx].price);
-                    if(newPrice !== null) { DB.contents[g][s][idx].price = parseInt(newPrice); save(); renderContentsList(); toast('قیمت تغییر کرد'); }
+                    if(newPrice !== null && !isNaN(parseInt(newPrice))) { DB.contents[g][s][idx].price = parseInt(newPrice); save(); renderContentsList(); toast('قیمت تغییر کرد'); }
                     let newSubject = prompt('درس جدید:', DB.contents[g][s][idx].subject || 'عمومی');
                     if(newSubject !== null) { DB.contents[g][s][idx].subject = newSubject; save(); renderContentsList(); toast('درس تغییر کرد'); }
+                    let newTeacher = prompt('نام مدرس:', DB.contents[g][s][idx].teacher || 'درسیار');
+                    if(newTeacher !== null) { DB.contents[g][s][idx].teacher = newTeacher; save(); renderContentsList(); toast('مدرس تغییر کرد'); }
                 };
                 window.deleteContentAdmin = (g,s,idx) => { if(confirm('حذف شود؟')) { DB.contents[g][s].splice(idx,1); save(); renderContentsList(); updateAdminStats(); toast('محتوا حذف شد'); } };
                 renderContentsList();
@@ -579,8 +595,10 @@
                     let g = document.getElementById('discountGrade').value;
                     let s = document.getElementById('discountSection').value;
                     let select = document.getElementById('discountContent');
-                    if(DB.contents[g] && DB.contents[g][s]) {
+                    if(DB.contents[g] && DB.contents[g][s] && DB.contents[g][s].length > 0) {
                         select.innerHTML = DB.contents[g][s].map((c,idx) => `<option value="${idx}">${c.title} - ${c.price} سکه</option>`).join('');
+                    } else {
+                        select.innerHTML = '<option value="-1">محتوایی وجود ندارد</option>';
                     }
                 }
                 document.getElementById('discountGrade').onchange = updateDiscountContentSelect;
@@ -591,14 +609,14 @@
                     let s = document.getElementById('discountSection').value;
                     let idx = parseInt(document.getElementById('discountContent').value);
                     let percent = parseInt(document.getElementById('discountPercent').value);
-                    if(percent >= 0 && percent <= 100) {
+                    if(idx >= 0 && percent >= 0 && percent <= 100 && DB.contents[g][s][idx]) {
                         DB.contents[g][s][idx].discount = percent;
                         save();
                         toast(`تخفیف ${percent}% اعمال شد`);
                         loadAdminTab('discounts');
-                    } else toast('درصد نامعتبر (0-100)', true);
+                    } else toast('درصد نامعتبر یا محتوا وجود ندارد', true);
                 };
-                let discHtml = '<table><tr><th>محصول</th><th>پایه</th><th>قیمت اصلی</th><th>قیمت با تخفیف</th><th>درصد</th><th>عملیات</th></tr>';
+                let discHtml = ' <meta charset="UTF-8"><table> <tr><th>محصول</th><th>پایه</th><th>قیمت اصلی</th><th>قیمت با تخفیف</th><th>درصد</th><th>عملیات</th></tr>';
                 for(let g of DB.grades) for(let s of DB.sections) if(DB.contents[g]?.[s]) DB.contents[g][s].forEach((c, idx) => {
                     if(c.discount > 0) {
                         let finalPrice = c.price - (c.price * c.discount / 100);
@@ -615,29 +633,28 @@
                 DB.subjects.forEach((s, idx) => { subjectsHtml += `<span style="background:white;padding:8px 16px;border-radius:100px;box-shadow:var(--shadow-sm);">${s} <button class="btn-danger" onclick="removeSubject(${idx})" style="padding:2px 8px;margin-right:8px;">✖</button></span>`; });
                 subjectsHtml += '</div>';
                 document.getElementById('subjectsList').innerHTML = subjectsHtml;
-                window.addNewSubject = () => { let newSub = document.getElementById('newSubject').value; if(newSub && !DB.subjects.includes(newSub)) { DB.subjects.push(newSub); save(); loadAdminTab('subjects'); toast('درس اضافه شد'); } else toast('درس تکراری یا نامعتبر', true); };
+                window.addNewSubject = () => { let newSub = document.getElementById('newSubject').value; if(newSub && !DB.subjects.includes(newSub)) { DB.subjects.push(newSub); save(); loadAdminTab('subjects'); toast('درس اضافه شد'); document.getElementById('newSubject').value = ''; } else toast('درس تکراری یا نامعتبر', true); };
                 window.removeSubject = (idx) => { if(confirm('حذف شود؟')) { DB.subjects.splice(idx,1); save(); loadAdminTab('subjects'); toast('درس حذف شد'); } };
             }
             else if(tab === 'gallery') {
-                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;"><input type="text" id="gUrl" placeholder="آدرس تصویر" style="width:300px;"><select id="gType"><option>image</option><option>gif</option></select><input type="text" id="gCaption" placeholder="عنوان"><button class="btn-success" onclick="addGalleryAdmin()">➕ افزودن</button></div><div id="galleryListAdmin"></div></div>`;
+                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;"><input type="text" id="gUrl" placeholder="آدرس تصویر یا GIF" style="min-width:300px;"><select id="gType"><option>image</option><option>gif</option></select><input type="text" id="gCaption" placeholder="عنوان"><button class="btn-success" onclick="addGalleryAdmin()">➕ افزودن</button></div><div id="galleryListAdmin"></div></div>`;
                 renderGalleryList();
-                window.renderGalleryList = () => { document.getElementById('galleryListAdmin').innerHTML = DB.gallery.map((g,idx) => `<div class="user-row"><span><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:8px;"> ${g.caption} (${g.type})</span><button class="btn-danger" onclick="deleteGalleryAdmin(${idx})">حذف</button></div>`).join(''); };
-                window.addGalleryAdmin = () => { let url = document.getElementById('gUrl').value, type = document.getElementById('gType').value, cap = document.getElementById('gCaption').value; if(url) { DB.gallery.push({ id: 'g'+Date.now(), type, url, caption: cap || 'بدون عنوان', likes: 0, date: new Date().toLocaleDateString('fa-IR') }); save(); renderGalleryList(); updateAdminStats(); toast('به گالری اضافه شد'); } };
+                window.renderGalleryList = () => { 
+                    if(DB.gallery.length === 0) {
+                        document.getElementById('galleryListAdmin').innerHTML = '<div class="empty-state" style="padding:40px;"><i class="fas fa-images"></i><p>گالری خالی است</p></div>';
+                    } else {
+                        document.getElementById('galleryListAdmin').innerHTML = DB.gallery.map((g,idx) => `<div class="user-row"><span><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:8px;"> ${g.caption} (${g.type})</span><button class="btn-danger" onclick="deleteGalleryAdmin(${idx})">حذف</button></div>`).join('');
+                    }
+                };
+                window.addGalleryAdmin = () => { let url = document.getElementById('gUrl').value, type = document.getElementById('gType').value, cap = document.getElementById('gCaption').value; if(url) { DB.gallery.push({ id: 'g'+Date.now(), type, url, caption: cap || 'بدون عنوان', likes: 0, date: new Date().toLocaleDateString('fa-IR') }); save(); renderGalleryList(); updateAdminStats(); toast('به گالری اضافه شد'); document.getElementById('gUrl').value = ''; document.getElementById('gCaption').value = ''; } else toast('آدرس تصویر الزامی است', true); };
                 window.deleteGalleryAdmin = (idx) => { if(confirm('حذف شود؟')) { DB.gallery.splice(idx,1); save(); renderGalleryList(); updateAdminStats(); toast('حذف شد'); } };
                 renderGalleryList();
             }
-            else if(tab === 'reports') {
-                let totalContent = 0, totalSales = 0, totalIncome = 0;
-                for(let g of DB.grades) for(let s of DB.sections) if(DB.contents[g]?.[s]) DB.contents[g][s].forEach(c => { totalContent++; totalSales += c.salesCount || 0; totalIncome += (c.salesCount || 0) * (c.price - (c.price * (c.discount||0)/100)); });
-                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><h3>📊 گزارشات کامل سیستم</h3><table style="width:100%;margin-top:20px;"><tr><th>نوع آمار</th><th>مقدار</th></tr><tr><td>کل کاربران</td><td>${DB.users.length} (${DB.users.filter(u=>u.verified).length} تایید شده)</td></tr></tr><td>کل محتواها</td><td>${totalContent}</td></tr><tr><td>کل فروش (تعداد)</td><td>${totalSales}</td></tr><tr><td>کل درآمد (سکه)</td><td>${totalIncome.toLocaleString('fa-IR')}</td></tr><tr><td>کل سکه‌های موجود</td><td>${DB.users.reduce((s,u)=>s+u.coins,0).toLocaleString('fa-IR')}</td></tr><tr><td>کل بازدیدها</td><td>${DB.stats.totalViews.toLocaleString('fa-IR')}</td></tr><tr><td>کل دانلودها</td><td>${DB.stats.totalDownloads.toLocaleString('fa-IR')}</td></tr><table><button class="btn-primary" onclick="exportFullReport()" style="margin-top:20px;"><i class="fas fa-download"></i> خروجی گزارش JSON</button><button class="btn-outline" onclick="exportUsersList()" style="margin-top:20px;margin-right:12px;"><i class="fas fa-users"></i> خروجی لیست کاربران</button></div>`;
-                window.exportFullReport = () => { let report = { date: new Date().toLocaleDateString('fa-IR'), stats: DB.stats, users: DB.users.length, verifiedUsers: DB.users.filter(u=>u.verified).length, contents: totalContent, totalIncome: totalIncome, totalCoins: DB.users.reduce((s,u)=>s+u.coins,0) }; let dataStr = JSON.stringify(report, null, 2); let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr); let link = document.createElement('a'); link.setAttribute('href', dataUri); link.setAttribute('download', `drsyar_report_${Date.now()}.json`); link.click(); toast('گزارش ذخیره شد'); };
-                window.exportUsersList = () => { let usersData = DB.users.map(u => ({ username: u.username, email: u.email, phone: u.phone, coins: u.coins, verified: u.verified, level: u.level, registerDate: u.registerDate, totalSpent: u.totalSpent })); let dataStr = JSON.stringify(usersData, null, 2); let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr); let link = document.createElement('a'); link.setAttribute('href', dataUri); link.setAttribute('download', `drsyar_users_${Date.now()}.json`); link.click(); toast('لیست کاربران ذخیره شد'); };
-            }
             else if(tab === 'settings') {
-                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><div><h3>🔐 تغییر رمز مدیریت</h3><input type="password" id="newAdminPass" placeholder="رمز جدید" style="width:200px;"><button class="btn-warning" onclick="changeAdminPassAdmin()">تغییر رمز</button></div><hr style="margin:20px 0;"><div><h3 style="color:var(--danger);">⚠️ خطر!</h3><button class="btn-danger" onclick="resetAllDataAdmin()">بازنشانی کامل داده‌ها</button><button class="btn-outline" onclick="exportFullDatabase()" style="margin-right:12px;">📥 خروجی کامل دیتابیس</button><button class="btn-outline" onclick="importDatabase()" style="margin-right:12px;">📤 بازیابی دیتابیس</button><input type="file" id="importFile" style="display:none;" accept=".json" onchange="handleImport()"></div></div>`;
-                window.changeAdminPassAdmin = () => { let p = document.getElementById('newAdminPass').value; if(p) { DB.adminPass = p; save(); toast('رمز مدیریت تغییر کرد'); } };
-                window.resetAllDataAdmin = () => { if(confirm('همه چیز پاک می‌شود! ادامه؟')) { localStorage.clear(); toast('داده‌ها پاک شد. صفحه رفرش می‌شود'); setTimeout(()=>location.reload(),1500); } };
-                window.exportFullDatabase = () => { let dataStr = JSON.stringify(DB, null, 2); let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr); let link = document.createElement('a'); link.setAttribute('href', dataUri); link.setAttribute('download', `drsyar_full_backup_${Date.now()}.json`); link.click(); toast('بکاپ کامل گرفته شد'); };
+                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:24px;"><div><h3>🔐 تغییر رمز مدیریت</h3><input type="password" id="newAdminPass" placeholder="رمز جدید" style="width:200px;"><button class="btn-warning" onclick="changeAdminPassAdmin()" style="margin-top:8px;">تغییر رمز</button></div><hr style="margin:20px 0;"><div><h3 style="color:var(--danger);">⚠️ خطر!</h3><button class="btn-danger" onclick="resetAllDataAdmin()">بازنشانی کامل داده‌ها</button><button class="btn-outline" onclick="exportFullDatabase()" style="margin-right:12px;">📥 خروجی کامل دیتابیس</button><button class="btn-outline" onclick="importDatabase()" style="margin-right:12px;">📤 بازیابی دیتابیس</button><input type="file" id="importFile" style="display:none;" accept=".json" onchange="handleImport(event)"></div></div>`;
+                window.changeAdminPassAdmin = () => { let p = document.getElementById('newAdminPass').value; if(p) { DB.adminPass = p; save(); toast('رمز مدیریت تغییر کرد'); document.getElementById('newAdminPass').value = ''; } };
+                window.resetAllDataAdmin = () => { if(confirm('⚠️ هشدار! همه چیز پاک می‌شود! آیا مطمئن هستید؟')) { localStorage.clear(); toast('داده‌ها پاک شد. صفحه رفرش می‌شود'); setTimeout(()=>location.reload(),1500); } };
+                window.exportFullDatabase = () => { let dataStr = JSON.stringify(DB, null, 2); let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr); let link = document.createElement('a'); link.setAttribute('href', dataUri); link.setAttribute('download', `drsyar_backup_${Date.now()}.json`); link.click(); toast('بکاپ کامل گرفته شد'); };
                 window.importDatabase = () => { document.getElementById('importFile').click(); };
                 window.handleImport = (event) => { let file = event.target.files[0]; if(file) { let reader = new FileReader(); reader.onload = (e) => { try { let imported = JSON.parse(e.target.result); if(imported.grades && imported.users && imported.contents) { DB = imported; save(); toast('دیتابیس با موفقیت بازیابی شد. صفحه رفرش می‌شود'); setTimeout(()=>location.reload(),1500); } else toast('فایل نامعتبر', true); } catch(err) { toast('خطا در خواندن فایل', true); } }; reader.readAsText(file); } };
             }
