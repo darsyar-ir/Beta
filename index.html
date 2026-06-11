@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>درسیار | نسخه ۰.۸۷ | حرفه‌ای و موبایل‌پسند</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #0d6e66;
+            --primary-light: #14b8a6;
+            --secondary: #f59e0b;
+            --secondary-dark: #d97706;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f97316;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --white: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+            --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+            --gradient-primary: linear-gradient(135deg, #0f766e 0%, #0d6e66 100%);
+            --gradient-secondary: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-bg: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+        }
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--gradient-bg);
+            color: var(--dark);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        body.dark-mode {
+            --primary: #2dd4bf;
+            --primary-dark: #14b8a6;
+            --primary-light: #5eead4;
+            --secondary: #fbbf24;
+            --secondary-dark: #f59e0b;
+            --light: #0f172a;
+            --gray-light: #1e293b;
+            --white: #1e293b;
+            --dark: #f1f5f9;
+            --gray: #94a3b8;
+            --gradient-bg: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            background: var(--gradient-bg);
+        }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--gray-light); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        body.dark-mode .header {
+            background: rgba(30,41,59,0.95);
+            border-bottom-color: rgba(255,255,255,0.05);
+        }
+        
+        .container { 
+            max-width: 1280px; 
+            margin: 0 auto; 
+            padding: 0 16px; 
+        }
+        
+        .header-inner { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 12px 0; 
+            flex-wrap: wrap; 
+            gap: 12px; 
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon { font-size: 28px; }
+        
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-badge {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 8px;
+            font-weight: 700;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(15,118,110,0.3);
+        }
+        
+        .btn-primary:active { transform: scale(0.97); }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-secondary {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+        
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gray-light);
+            padding: 4px 12px 4px 8px;
+            border-radius: 60px;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .user-name { font-weight: 700; font-size: 12px; color: var(--primary); }
+        .user-coins { font-size: 10px; color: var(--secondary); font-weight: 600; }
+        
+        .hero-banner {
+            background: var(--gradient-primary);
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .hero-icon { font-size: 32px; color: rgba(255,255,255,0.3); }
+        .hero-text { flex: 1; color: white; font-size: 13px; line-height: 1.6; }
+        .hero-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 10px;
+        }
+        
+        .grades-scroll {
+            margin: 20px 0 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+        
+        .grades-list {
+            display: flex;
+            gap: 10px;
+            padding-bottom: 8px;
+            min-width: min-content;
+        }
+        
+        .grade-btn {
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 700;
+            background: var(--white);
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: inherit;
+            font-size: 13px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
+        }
+        
+        .grade-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .grade-btn:active { transform: scale(0.96); }
+        
+        .tabs-wrapper {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .tabs-list {
+            display: flex;
+            gap: 4px;
+            min-width: min-content;
+        }
+        
+        .tab-btn {
+            padding: 10px 18px;
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: inherit;
+            font-size: 13px;
+            position: relative;
+        }
+        
+        .tab-btn.active { color: var(--primary); font-weight: 700; }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            right: 0;
+            left: 0;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .filters-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+        }
+        
+        .filters-list {
+            display: flex;
+            gap: 10px;
+            padding-bottom: 4px;
+            min-width: min-content;
+        }
+        
+        .filter-chip {
+            padding: 6px 18px;
+            border-radius: 50px;
+            background: var(--white);
+            border: 1px solid var(--gray-light);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        @media (min-width: 640px) {
+            .content-grid { grid-template-columns: repeat(2, 1fr); }
+            .container { padding: 0 24px; }
+        }
+        
+        @media (min-width: 1024px) {
+            .content-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        .content-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 18px;
+            transition: all 0.2s;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .content-card:active { transform: scale(0.98); }
+        
+        .card-category {
+            display: inline-block;
+            background: var(--gray-light);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .card-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+        .card-desc { color: var(--gray); font-size: 12px; margin-bottom: 12px; line-height: 1.5; }
+        
+        .card-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 11px;
+            color: var(--gray);
+            flex-wrap: wrap;
+        }
+        
+        .price-tag {
+            background: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        .discount-badge {
+            background: var(--danger);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 10px;
+            margin-right: 6px;
+        }
+        
+        .rating-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        
+        .stars { display: flex; gap: 4px; }
+        .stars i { color: var(--secondary); cursor: pointer; font-size: 14px; }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: 28px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        .admin-panel {
+            background: var(--white);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 640px) {
+            .admin-stats-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        
+        .admin-stat-card {
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            color: white;
+        }
+        
+        .admin-stat-number { font-size: 22px; font-weight: 800; }
+        .admin-stat-label { font-size: 11px; opacity: 0.9; }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
+            padding-bottom: 12px;
+        }
+        
+        .admin-tab-btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: var(--gray-light);
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .admin-tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        input, select, textarea {
+            padding: 10px 14px;
+            border: 1px solid var(--gray-light);
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 13px;
+            background: var(--white);
+            width: 100%;
+        }
+        
+        textarea { border-radius: 20px; }
+        
+        .user-row {
+            background: var(--gray-light);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            background: var(--gradient-primary);
+            color: white;
+            margin-top: 40px;
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .footer p { font-size: 12px; margin-top: 6px; opacity: 0.9; }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 60px;
+            z-index: 2000;
+            animation: toastAnim 2.5s forwards;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            max-width: 90%;
+            text-align: center;
+        }
+        
+        @media (max-width: 480px) {
+            .toast { white-space: normal; }
+        }
+        
+        @keyframes toastAnim {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: 24px;
+        }
+        
+        .empty-state i { font-size: 48px; color: var(--gray-light); margin-bottom: 16px; }
+        
+        .theme-toggle {
+            background: var(--gray-light);
+            border: none;
+            border-radius: 50px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        th {
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">🎓</span>
+                <h1>درسیار</h1>
+                <span class="logo-badge">۰.۸۷</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="btn btn-outline" id="searchBtn"><i class="fas fa-search"></i></button>
+                <button class="btn btn-secondary" id="adminBtn"><i class="fas fa-crown"></i></button>
+                <div class="user-panel">
+                    <div class="user-avatar" id="userAvatar">👤</div>
+                    <div style="display: none;" class="user-info">
+                        <div class="user-name" id="userName">مهمان</div>
+                        <div class="user-coins" id="userCoins"><i class="fas fa-coins"></i> 0</div>
+                    </div>
+                    <button class="btn btn-primary" id="authBtn" style="padding: 4px 12px;">ورود</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="hero-text" id="announceText"></div>
+            <div class="hero-badge" id="announceDate"><i class="far fa-calendar-alt"></i></div>
+        </div>
+    </div>
+    
+    <div class="grades-scroll">
+        <div class="grades-list" id="gradesList"></div>
+    </div>
+    
+    <div class="tabs-wrapper">
+        <div class="tabs-list" id="tabsList"></div>
+    </div>
+    
+    <div class="filters-scroll">
+        <div class="filters-list" id="filtersBar"></div>
+    </div>
+    
+    <div id="mainContent"></div>
+</div>
+
+<div class="footer">
+    <p style="font-weight: 700;">✨ درسیار | نسخه ۰.۸۷ ✨</p>
+    <p>پیشرفته‌ترین سامانه مدیریت محتوای آموزشی</p>
+</div>
+
+<script>
+    let DB = {
+        grades: ['هفتم', 'هشتم', 'نهم'],
+        subjects: ['ریاضی', 'فیزیک', 'شیمی', 'علوم', 'ادبیات', 'زبان انگلیسی', 'عربی', 'دینی', 'اجتماعی', 'هنر', 'برنامه‌نویسی'],
+        sections: ['📚 جزوه', '📖 کتاب', '📝 نمونه سوال', '🎬 فیلم آموزشی', '🖼️ گالری'],
+        contents: {},
+        gallery: [],
+        users: [
+            { id: 'u1', username: 'admin', password: 'admin123', verified: true, role: 'admin', coins: 10000, avatar: '👑', email: 'admin@drsyar.com', phone: '09123456789', registerDate: '۱۴۰۳/۰۱/۰۱', level: 'طلایی', lastLogin: '۱۴۰۳/۱۰/۱۵', totalPurchases: 0, totalSpent: 0 }
+        ],
+        adminPass: 'admin123',
+        announcement: { text: '🎓 به درسیار خوش آمدید! بهترین سامانه آموزش ایران', date: '۱۴۰۳' },
+        stats: { totalViews: 0, totalDownloads: 0, totalComments: 0, totalSales: 0, totalIncome: 0 }
+    };
+    
+    for(let g of DB.grades) {
+        DB.contents[g] = {};
+        for(let s of DB.sections) {
+            if(s !== '🖼️ گالری') DB.contents[g][s] = [];
+        }
+    }
+    
+    let currentUser = null;
+    let currentGrade = 'هفتم';
+    let currentSection = '📚 جزوه';
+    let currentFilter = 'all';
+    let currentSubject = 'all';
+    let isDarkMode = false;
+    
+    function save() { 
+        localStorage.setItem('drsyar_087', JSON.stringify(DB)); 
+        if(currentUser) localStorage.setItem('drsyar_user_087', JSON.stringify({ username: currentUser.username })); 
+    }
+    
+    function load() { 
+        let d = localStorage.getItem('drsyar_087'); 
+        if(d) DB = JSON.parse(d); 
+        else save();
+        
+        for(let g of DB.grades) {
+            if(!DB.contents[g]) DB.contents[g] = {};
+            for(let s of DB.sections) {
+                if(s !== '🖼️ گالری' && !DB.contents[g][s]) DB.contents[g][s] = [];
+            }
+        }
+        
+        let u = localStorage.getItem('drsyar_user_087'); 
+        if(u) { 
+            let userData = JSON.parse(u); 
+            currentUser = DB.users.find(x => x.username === userData.username) || null; 
+        } 
+        
+        let theme = localStorage.getItem('drsyar_theme_087');
+        if(theme === 'dark') {
+            isDarkMode = true;
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').innerHTML = '☀️';
+        }
+    }
+    
+    function toast(msg, isError = false) { 
+        let t = document.createElement('div'); 
+        t.className = 'toast'; 
+        t.style.background = isError ? 'var(--danger)' : 'var(--primary)'; 
+        t.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${msg}`; 
+        document.body.appendChild(t); 
+        setTimeout(() => t.remove(), 2500); 
+    }
+    
+    function canAccessVip() { return currentUser && currentUser.verified === true; }
+    
+    function purchaseContent(item, grade, section) {
+        if(!currentUser) { toast('لطفاً وارد شوید', true); return false; }
+        let finalPrice = item.price - (item.price * (item.discount || 0) / 100);
+        if(currentUser.coins >= finalPrice) {
+            currentUser.coins -= finalPrice;
+            currentUser.totalPurchases = (currentUser.totalPurchases || 0) + 1;
+            currentUser.totalSpent = (currentUser.totalSpent || 0) + finalPrice;
+            item.salesCount = (item.salesCount || 0) + 1;
+            DB.stats.totalSales += finalPrice;
+            DB.stats.totalIncome += finalPrice;
+            save();
+            toast(`✅ خرید موفق! ${finalPrice} سکه`, false);
+            render();
+            return true;
+        } else {
+            toast(`❌ سکه کافی نیست! نیاز به ${finalPrice} سکه`, true);
+            return false;
+        }
+    }
+    
+    function searchContent(keyword) {
+        let results = [];
+        if(!keyword) return results;
+        keyword = keyword.toLowerCase();
+        for(let g of DB.grades) {
+            for(let s of DB.sections) {
+                if(DB.contents[g] && DB.contents[g][s]) {
+                    DB.contents[g][s].forEach(item => {
+                        if(item.title && (item.title.toLowerCase().includes(keyword) || (item.desc && item.desc.toLowerCase().includes(keyword)) || (item.subject && item.subject.toLowerCase().includes(keyword)))) {
+                            results.push({ ...item, grade: g, section: s });
+                        }
+                    });
+                }
+            }
+        }
+        return results;
+    }
+    
+    function showSearchModal() {
+        let modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-search"></i> جستجو</h3>
+                <input type="text" id="searchInput" placeholder="عنوان، درس، توضیحات..." style="width:100%;margin-bottom:20px;">
+                <div id="searchResults" style="max-height: 300px; overflow-y: auto;"></div>
+                <button class="btn-outline" onclick="this.closest('.modal-overlay').remove()" style="margin-top:20px;width:100%;">بستن</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        let input = document.getElementById('searchInput');
+        input.addEventListener('input', (e) => {
+            let results = searchContent(e.target.value);
+            let resultsDiv = document.getElementById('searchResults');
+            if(results.length === 0) resultsDiv.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-search"></i><p>نتیجه‌ای یافت نشد</p></div>';
+            else resultsDiv.innerHTML = results.map(r => `<div style="padding:12px;border-bottom:1px solid var(--gray-light);cursor:pointer;" onclick="selectSearchResult('${r.grade}','${r.section}'); document.querySelector('.modal-overlay').remove()"><strong>${r.title}</strong><div style="font-size:11px;color:gray;">${r.grade} - ${r.subject || 'عمومی'} - ${r.price || 0} سکه</div></div>`).join('');
+        });
+        input.focus();
+    }
+    
+    window.selectSearchResult = (grade, section) => { 
+        currentGrade = grade; 
+        currentSection = section; 
+        render(); 
+        toast(`نمایش ${grade} - ${section}`); 
+    };
+    
+    function render() {
+        document.getElementById('gradesList').innerHTML = DB.grades.map(g => `<button class="grade-btn ${currentGrade === g ? 'active' : ''}" onclick="selectGrade('${g}')">پایه ${g}</button>`).join('');
+        document.getElementById('tabsList').innerHTML = DB.sections.map(s => `<button class="tab-btn ${currentSection === s ? 'active' : ''}" onclick="selectSection('${s}')">${s}</button>`).join('');
+        
+        // فیلترهای به‌روز شده بدون گزینه‌های ویژه و پرامتیاز
+        if(currentSection !== '🖼️ گالری') {
+            document.getElementById('filtersBar').innerHTML = `
+                <div class="filter-chip ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">همه</div>
+                <div class="filter-chip ${currentFilter === 'normal' ? 'active' : ''}" onclick="setFilter('normal')">عمومی</div>
+                <div class="filter-chip ${currentFilter === 'free' ? 'active' : ''}" onclick="setFilter('free')">🎁 رایگان</div>
+                <div class="filter-chip ${currentFilter === 'subject' ? 'active' : ''}" onclick="showSubjectFilter()">📚 درس</div>
+            `;
+        } else document.getElementById('filtersBar').innerHTML = '';
+        
+        document.getElementById('announceText').innerHTML = DB.announcement.text;
+        document.getElementById('announceDate').innerHTML = `<i class="far fa-calendar-alt"></i> ${DB.announcement.date}`;
+        
+        if(currentUser) {
+            document.getElementById('userName').innerHTML = `${currentUser.username}`;
+            document.getElementById('userCoins').innerHTML = `<i class="fas fa-coins"></i> ${currentUser.coins}`;
+            document.getElementById('userAvatar').innerText = currentUser.avatar || '👤';
+            document.getElementById('authBtn').innerHTML = 'خروج';
+            document.getElementById('authBtn').className = 'btn btn-outline';
+            document.querySelector('.user-info').style.display = 'block';
+        } else {
+            document.getElementById('userName').innerHTML = 'مهمان';
+            document.getElementById('userCoins').innerHTML = '<i class="fas fa-coins"></i> 0';
+            document.getElementById('userAvatar').innerHTML = '👤';
+            document.getElementById('authBtn').innerHTML = 'ورود';
+            document.getElementById('authBtn').className = 'btn btn-primary';
+            document.querySelector('.user-info').style.display = 'none';
+        }
+        
+        if(currentSection === '🖼️ گالری') renderGallery();
+        else renderContents();
+    }
+    
+    function showSubjectFilter() {
+        let modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3><i class="fas fa-flask"></i> انتخاب درس</h3>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;">
+                    ${DB.subjects.map(s => `<button class="btn-outline" onclick="filterBySubject('${s}'); this.closest('.modal-overlay').remove()" style="padding:6px 14px;font-size:12px;">${s}</button>`).join('')}
+                    <button class="btn-primary" onclick="filterBySubject('all'); this.closest('.modal-overlay').remove()" style="padding:6px 14px;">همه</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    window.filterBySubject = (subject) => { currentSubject = subject; render(); };
+    
+    function filterBySubjectContent(items) {
+        if(currentSubject === 'all') return items;
+        return items.filter(i => i.subject === currentSubject);
+    }
+    
+    function renderContents() {
+        let items = DB.contents[currentGrade]?.[currentSection] || [];
+        items = filterBySubjectContent(items);
+        let filtered = [...items];
+        
+        // حذف فیلترهای vip و top
+        if(currentFilter === 'normal') filtered = filtered.filter(i => !i.vip);
+        if(currentFilter === 'free') filtered = filtered.filter(i => (i.price - (i.price * (i.discount||0)/100)) === 0);
+        
+        if(filtered.length === 0) {
+            document.getElementById('mainContent').innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>هیچ محتوایی وجود ندارد</p><button class="btn-primary" onclick="document.getElementById('adminBtn').click()">➕ افزودن محتوا</button></div>`;
+            return;
+        }
+        
+        let html = `<div class="content-grid">${filtered.map((item, idx) => {
+            let locked = item.vip && !canAccessVip();
+            let finalPrice = (item.price || 0) - ((item.price || 0) * (item.discount || 0) / 100);
+            return `
+                <div class="content-card">
+                    ${item.vip ? '<div class="vip-ribbon"><i class="fas fa-crown"></i> ویژه</div>' : ''}
+                    <div class="card-category">${item.subject || 'عمومی'} ${item.discount > 0 ? `<span class="discount-badge">${item.discount}%</span>` : ''}</div>
+                    <h3 class="card-title">${item.title || 'بدون عنوان'}</h3>
+                    <p class="card-desc">${item.desc || 'توضیحاتی وجود ندارد'}</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-eye"></i> ${item.views || 0}</span>
+                        <span><i class="fas fa-download"></i> ${item.downloads || 0}</span>
+                        <span><i class="fas fa-chalkboard-user"></i> ${item.teacher || 'درسیار'}</span>
+                        <span class="price-tag">💰 ${finalPrice}</span>
+                    </div>
+                    <div class="rating-area">
+                        <div class="stars" data-id="${item.id}">${[1,2,3,4,5].map(s => `<i class="fa-${(item.rating || 0) >= s ? 'solid' : 'regular'} fa-star" data-star="${s}"></i>`).join('')}</div>
+                        <span>${item.rating || 0}</span>
+                    </div>
+                    ${!locked ? `<button class="btn-primary" style="width:100%;" onclick="purchaseAndView('${currentGrade}','${currentSection}',${idx})">خرید با ${finalPrice} سکه</button>` : `<button class="btn-primary" disabled style="width:100%;opacity:0.6">🔒 ویژه اعضا</button>`}
+                </div>
+            `;
+        }).join('')}</div>`;
+        document.getElementById('mainContent').innerHTML = html;
+        
+        document.querySelectorAll('.stars').forEach(el => {
+            let id = el.dataset.id;
+            el.querySelectorAll('i').forEach(star => {
+                star.onclick = () => {
+                    if(!currentUser) { toast('وارد شوید', true); return; }
+                    let val = parseInt(star.dataset.star);
+                    for(let g of DB.grades) {
+                        for(let s of DB.sections) {
+                            if(DB.contents[g] && DB.contents[g][s]) {
+                                let idx2 = DB.contents[g][s].findIndex(x => x.id === id);
+                                if(idx2 !== -1) {
+                                    DB.contents[g][s][idx2].rating = val;
+                                    save();
+                                    render();
+                                    toast(`امتیاز ${val} ثبت شد`);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                };
+            });
+        });
+    }
+    
+    window.purchaseAndView = (grade, section, idx) => {
+        let item = DB.contents[grade][section][idx];
+        if(purchaseContent(item, grade, section)) {
+            if(item.link && item.link !== '#') window.open(item.link, '_blank');
+            else toast('لینک در دسترس نیست');
+        }
+    };
+    
+    function renderGallery() {
+        if(DB.gallery.length === 0) {
+            document.getElementById('mainContent').innerHTML = `<div class="empty-state"><i class="fas fa-images"></i><p>گالری خالی است</p><button class="btn-primary" onclick="document.getElementById('adminBtn').click()">➕ افزودن تصویر</button></div>`;
+            return;
+        }
+        document.getElementById('mainContent').innerHTML = `<div class="content-grid">${DB.gallery.map(g => `
+            <div class="content-card" style="padding:0;overflow:hidden;cursor:pointer;" onclick="window.open('${g.url}','_blank')">
+                ${g.type === 'gif' ? `<video autoplay loop muted playsinline src="${g.url}" style="width:100%;height:180px;object-fit:cover;"></video>` : `<img src="${g.url}" style="width:100%;height:180px;object-fit:cover;">`}
+                <div style="padding:14px;"><strong>${g.caption}</strong><div style="display:flex;justify-content:space-between;margin-top:8px;color:gray;font-size:11px;"><span><i class="far fa-calendar"></i> ${g.date}</span><span><i class="fas fa-heart"></i> ${g.likes}</span></div></div>
+            </div>
+        `).join('')}</div>`;
+    }
+    
+    window.selectGrade = (g) => { currentGrade = g; render(); };
+    window.selectSection = (s) => { currentSection = s; render(); };
+    window.setFilter = (f) => { currentFilter = f; render(); };
+    
+    document.getElementById('searchBtn').onclick = () => showSearchModal();
+    document.getElementById('themeToggle').onclick = () => {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark-mode', isDarkMode);
+        document.getElementById('themeToggle').innerHTML = isDarkMode ? '☀️' : '🌙';
+        localStorage.setItem('drsyar_theme_087', isDarkMode ? 'dark' : 'light');
+    };
+    
+    document.getElementById('authBtn').onclick = () => {
+        if(currentUser) { 
+            currentUser = null; 
+            localStorage.removeItem('drsyar_user_087'); 
+            toast('خارج شدید'); 
+            render(); 
+            return; 
+        }
+        let action = prompt('درسیار\n\n1️⃣ ورود\n2️⃣ ثبت‌نام\n\nشماره را وارد کنید:');
+        if(action === '2') {
+            let un = prompt('نام کاربری:');
+            if(!un || DB.users.find(u=>u.username===un)) { toast('نام تکراری', true); return; }
+            let pw = prompt('رمز عبور:');
+            let email = prompt('ایمیل:');
+            let phone = prompt('تلفن:');
+            DB.users.push({ 
+                id: 'u'+Date.now(), username: un, password: pw, verified: false, role: 'student', coins: 100, avatar: '👨‍🎓', 
+                email: email || '', phone: phone || '', registerDate: new Date().toLocaleDateString('fa-IR'), level: 'برنزی', 
+                lastLogin: new Date().toLocaleDateString('fa-IR'), totalPurchases: 0, totalSpent: 0 
+            });
+            save();
+            toast('✅ ثبت‌نام موفق! منتظر تأیید ادمین باشید');
+        } else if(action === '1') {
+            let un = prompt('نام کاربری:');
+            let pw = prompt('رمز عبور:');
+            let user = DB.users.find(u=>u.username===un && u.password===pw);
+            if(user) { 
+                currentUser = user; 
+                save(); 
+                toast(`✨ خوش آمدید ${un}`); 
+                render(); 
+            } else toast('نام کاربری یا رمز اشتباه است', true);
+        }
+    };
+    
+    document.getElementById('adminBtn').onclick = () => {
+        let pass = prompt('رمز مدیریت:');
+        if(pass !== DB.adminPass) { toast('رمز اشتباه است', true); return; }
+        openAdminPanel();
+    };
+    
+    function openAdminPanel() {
+        let modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="admin-panel">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                    <h2 style="font-size:20px;">🛠️ پنل مدیریت</h2>
+                    <button class="btn-outline" onclick="this.closest('.modal-overlay').remove()" style="padding:6px 12px;">✖</button>
+                </div>
+                <div class="admin-stats-grid" id="adminStats"></div>
+                <div class="admin-tabs" id="adminTabs"></div>
+                <div id="adminTabContent"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        const tabs = [
+            { id: 'dashboard', name: '📊 داشبورد', icon: 'fas fa-chart-line' },
+            { id: 'announce', name: '📢 اعلان', icon: 'fas fa-bullhorn' },
+            { id: 'users', name: '👥 کاربران', icon: 'fas fa-users' },
+            { id: 'coins', name: '💰 سکه', icon: 'fas fa-coins' },
+            { id: 'content', name: '📚 محتوا', icon: 'fas fa-book' },
+            { id: 'discounts', name: '🏷️ تخفیف', icon: 'fas fa-tag' },
+            { id: 'subjects', name: '📚 دروس', icon: 'fas fa-flask' },
+            { id: 'gallery', name: '🖼️ گالری', icon: 'fas fa-images' },
+            { id: 'settings', name: '⚙️ تنظیمات', icon: 'fas fa-cog' }
+        ];
+        
+        document.getElementById('adminTabs').innerHTML = tabs.map(t => `<button class="admin-tab-btn" data-tab="${t.id}"><i class="${t.icon}"></i> ${t.name}</button>`).join('');
+        
+        function updateAdminStats() {
+            let totalContent = 0;
+            for(let g of DB.grades) for(let s of DB.sections) if(DB.contents[g]?.[s]) totalContent += DB.contents[g][s].length;
+            let totalCoins = DB.users.reduce((sum, u) => sum + u.coins, 0);
+            document.getElementById('adminStats').innerHTML = `
+                <div class="admin-stat-card"><div class="admin-stat-number">${DB.users.length}</div><div class="admin-stat-label">کاربران</div></div>
+                <div class="admin-stat-card"><div class="admin-stat-number">${totalContent}</div><div class="admin-stat-label">محتوا</div></div>
+                <div class="admin-stat-card"><div class="admin-stat-number">${totalCoins}</div><div class="admin-stat-label">سکه</div></div>
+                <div class="admin-stat-card"><div class="admin-stat-number">${DB.stats.totalIncome}</div><div class="admin-stat-label">درآمد</div></div>
+                <div class="admin-stat-card"><div class="admin-stat-number">${DB.gallery.length}</div><div class="admin-stat-label">گالری</div></div>
+            `;
+        }
+        
+        function loadAdminTab(tab) {
+            let contentDiv = document.getElementById('adminTabContent');
+            
+            if(tab === 'dashboard') {
+                contentDiv.innerHTML = `
+                    <div style="background:var(--gray-light);border-radius:20px;padding:20px;">
+                        <h3>📊 آمار سیستم</h3>
+                        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px;">
+                            <div><i class="fas fa-eye"></i> بازدید: ${DB.stats.totalViews || 0}</div>
+                            <div><i class="fas fa-download"></i> دانلود: ${DB.stats.totalDownloads || 0}</div>
+                            <div><i class="fas fa-comment"></i> نظرات: ${DB.stats.totalComments || 0}</div>
+                            <div><i class="fas fa-chart-line"></i> فروش: ${DB.stats.totalSales || 0}</div>
+                        </div>
+                        <hr style="margin:16px 0;">
+                        <p><strong>👑 ادمین:</strong> admin / admin123</p>
+                        <p><strong>🔐 رمز پنل:</strong> admin123</p>
+                    </div>
+                `;
+            }
+            else if(tab === 'announce') {
+                contentDiv.innerHTML = `<div style="background:var(--gray-light);border-radius:20px;padding:20px;"><h3>📢 ویرایش اعلان</h3><textarea id="annText" rows="2" style="width:100%;margin:12px 0;">${DB.announcement.text}</textarea><input type="text" id="annDate" value="${DB.announcement.date}" style="margin-bottom:12px;"><button class="btn-primary" onclick="saveAnnounce()">💾 ذخیره</button></div>`;
+                window.saveAnnounce = () => { DB.announcement.text = document.getElementById('annText').value; DB.announcement.date = document.getElementById('annDate').value; save(); toast('اعلان ذخیره شد'); loadAdminTab('announce'); render(); };
+            }
+            else if(tab === 'users') {
+                contentDiv.innerHTML = `<div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"><input type="text" id="newUser" placeholder="نام کاربری" style="flex:1;"><input type="password" id="newPass" placeholder="رمز" style="flex:1;"><button class="btn-success" onclick="addNewUserAdmin()">➕ افزودن</button></div><div id="usersListAdmin"></div></div>`;
+                renderUsersList();
+                window.renderUsersList = () => {
+                    document.getElementById('usersListAdmin').innerHTML = DB.users.map(u => `
+                        <div class="user-row">
+                            <div><span style="font-size:24px;">${u.avatar}</span><div><strong>${u.username}</strong><br><small>${u.email || '-'}</small></div></div>
+                            <div><span class="price-tag">💰 ${u.coins}</span><br>${u.verified ? '✅' : '⏳'}</div>
+                            <div><button class="btn-primary" onclick="toggleVerifyUser('${u.id}')" style="padding:4px 10px;font-size:11px;">${u.verified ? 'لغو' : 'تایید'}</button><button class="btn-danger" onclick="deleteUserAdmin('${u.id}')" style="padding:4px 10px;font-size:11px;">🗑</button></div>
+                        </div>
+                    `).join('');
+                };
+                window.toggleVerifyUser = (id) => { let u = DB.users.find(x=>x.id===id); if(u) { u.verified = !u.verified; save(); renderUsersList(); updateAdminStats(); toast(`${u.username} ${u.verified ? 'تایید شد' : 'تایید لغو شد'}`); } };
+                window.deleteUserAdmin = (id) => { if(confirm('حذف شود؟')) { DB.users = DB.users.filter(x=>x.id!==id); if(currentUser && currentUser.id === id) currentUser = null; save(); renderUsersList(); updateAdminStats(); toast('کاربر حذف شد'); if(currentUser === null) render(); } };
+                window.addNewUserAdmin = () => {
+                    let un = document.getElementById('newUser').value, pw = document.getElementById('newPass').value;
+                    if(un && pw) { 
+                        DB.users.push({ id: 'u'+Date.now(), username: un, password: pw, verified: false, role: 'student', coins: 100, avatar: '👨‍🎓', email: '', phone: '', registerDate: new Date().toLocaleDateString('fa-IR'), level: 'برنزی', lastLogin: '', totalPurchases: 0, totalSpent: 0 }); 
+                        save(); renderUsersList(); updateAdminStats(); toast('کاربر اضافه شد'); 
+                        document.getElementById('newUser').value = ''; document.getElementById('newPass').value = '';
+                    } else toast('نام و رمز الزامی', true);
+                };
+                renderUsersList();
+            }
+            else if(tab === 'coins') {
+                contentDiv.innerHTML = `<div id="coinsList"></div>`;
+                let coinsHtml = DB.users.map(u => `
+                    <div class="user-row">
+                        <div><strong>${u.username}</strong><br><small>${u.level || 'برنزی'}</small></div>
+                        <div><span style="font-size:18px;color:var(--secondary);">💰 ${u.coins}</span></div>
+                        <div class="coin-input-group" style="display:flex;gap:6px;"><input type="number" id="coinAmt_${u.id}" placeholder="مقدار" style="width:70px;"><button class="btn-success" onclick="addCoinsToUser('${u.id}')" style="padding:4px 10px;">+</button><button class="btn-danger" onclick="removeCoinsFromUser('${u.id}')" style="padding:4px 10px;">-</button></div>
+                    </div>
+                `).join('');
+                document.getElementById('coinsList').innerHTML = coinsHtml;
+                window.addCoinsToUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt && !isNaN(amt)) { u.coins += amt; save(); toast(`${amt} سکه اضافه شد`); loadAdminTab('coins'); updateAdminStats(); if(currentUser && currentUser.id === id) render(); } };
+                window.removeCoinsFromUser = (id) => { let u = DB.users.find(x=>x.id===id); let amt = parseInt(document.getElementById(`coinAmt_${id}`).value); if(u && amt && !isNaN(amt) && u.coins >= amt) { u.coins -= amt; save(); toast(`${amt} سکه کم شد`); loadAdminTab('coins'); updateAdminStats(); if(currentUser && currentUser.id === id) render(); } else toast('سکه کافی نیست', true); };
+            }
+            else if(tab === 'content') {
+                window.addNewContentAdmin = function() {
+                    let grade = document.getElementById('cGrade').value;
+                    let section = document.getElementById('cSection').value;
+                    let title = document.getElementById('cTitle').value.trim();
+                    let link = document.getElementById('cLink').value.trim();
+                    let subject = document.getElementById('cSubject').value;
+                    let price = parseInt(document.getElementById('cPrice').value) || 0;
+                    if(!title) { toast('عنوان الزامی است', true); return; }
+                    if(!link) { toast('لینک الزامی است', true); return; }
+                    let newContent = {
+                        id: 'c' + Date.now(), title: title, desc: document.getElementById('cDesc').value.trim() || 'بدون توضیحات',
+                        link: link, subject: subject, price: price, teacher: document.getElementById('cTeacher').value.trim() || 'درسیار',
+                        vip: document.getElementById('cVip').checked, rating: 0, views: 0, downloads: 0, discount: 0, salesCount: 0, comments: []
+                    };
+                    if(!DB.contents[grade]) DB.contents[grade] = {};
+                    if(!DB.contents[grade][section]) DB.contents[grade][section] = [];
+                    DB.contents[grade][section].push(newContent);
+                    save();
+                    if(typeof renderContentsList === 'function') renderContentsList();
+                    updateAdminStats();
+                    toast(`✅ "${title}" اضافه شد`);
+                    document.getElementById('cTitle').value = '';
+                    document.getElementById('cLink').value = '';
+                };
+                
+                contentDiv.innerHTML = `
+                    <div style="background:var(--gray-light);border-radius:20px;padding:20px;">
+                        <h3>➕ محتوای جدید</h3>
+                        <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0;">
+                            <select id="cGrade">${DB.grades.map(g=>`<option>${g}</option>`).join('')}</select>
+                            <select id="cSection">${DB.sections.filter(s=>s!=='🖼️ گالری').map(s=>`<option>${s}</option>`).join('')}</select>
+                            <input type="text" id="cTitle" placeholder="عنوان *">
+                            <input type="text" id="cDesc" placeholder="توضیحات">
+                            <input type="text" id="cLink" placeholder="لینک *">
+                            <select id="cSubject">${DB.subjects.map(c=>`<option>${c}</option>`).join('')}</select>
+                            <input type="number" id="cPrice" placeholder="قیمت (سکه)" value="0">
+                            <input type="text" id="cTeacher" placeholder="مدرس">
+                            <label><input type="checkbox" id="cVip"> محتوای ویژه</label>
+                            <button class="btn-success" onclick="addNewContentAdmin()">➕ افزودن</button>
+                        </div>
+                        <hr>
+                        <h3>📚 لیست محتوا</h3>
+                        <div class="table-responsive"><div id="contentsListAdmin" style="margin-top:16px;"></div></div>
+                    </div>
+                `;
+                
+                window.renderContentsList = function() {
+                    let html = '</tr><th>پایه</th><th>دسته</th><th>عنوان</th><th>قیمت</th><th></th></tr>';
+                    let hasContent = false;
+                    for(let g of DB.grades) {
+                        for(let s of DB.sections) {
+                            if(s !== '🖼️ گالری' && DB.contents[g]?.[s] && DB.contents[g][s].length > 0) {
+                                hasContent = true;
+                                DB.contents[g][s].forEach((c, idx) => { 
+                                    html += `<tr><td>${g}</td><td>${s}</td><td><strong>${c.title}</strong></td><td>💰 ${c.price}</td><td><button class="btn-danger" onclick="deleteContentConfirm('${g}','${s}',${idx})" style="padding:4px 10px;">🗑</button></td></tr>`; 
+                                });
+                            }
+                        }
+                    }
+                    html += '</table>';
+                    if(!hasContent) html = '<div class="empty-state" style="padding:20px;"><i class="fas fa-book"></i><p>هیچ محتوایی ندارد</p></div>';
+                    document.getElementById('contentsListAdmin').innerHTML = html;
+                };
+                
+                window.deleteContentConfirm = function(g, s, idx) {
+                    if(confirm('حذف شود؟')) { DB.contents[g][s].splice(idx,1); save(); renderContentsList(); updateAdminStats(); toast('حذف شد'); }
+                };
+                
+                renderContentsList();
+            }
+            else if(tab === 'discounts') {
+                contentDiv.innerHTML = `<div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"><select id="discountGrade"><option>هفتم</option><option>هشتم</option><option>نهم</option></select><select id="discountSection"><option>📚 جزوه</option><option>📖 کتاب</option><option>📝 نمونه سوال</option><option>🎬 فیلم آموزشی</option></select><select id="discountContent"></select><input type="number" id="discountPercent" placeholder="درصد" style="width:80px;"><button class="btn-success" onclick="applyDiscount()">اعمال</button></div><div id="discountsList"></div></div>`;
+                function updateDiscountContentSelect() {
+                    let g = document.getElementById('discountGrade').value;
+                    let s = document.getElementById('discountSection').value;
+                    let select = document.getElementById('discountContent');
+                    if(DB.contents[g] && DB.contents[g][s] && DB.contents[g][s].length > 0) {
+                        select.innerHTML = DB.contents[g][s].map((c,idx) => `<option value="${idx}">${c.title} - ${c.price}</option>`).join('');
+                    } else select.innerHTML = '<option value="-1">ندارد</option>';
+                }
+                document.getElementById('discountGrade').onchange = updateDiscountContentSelect;
+                document.getElementById('discountSection').onchange = updateDiscountContentSelect;
+                updateDiscountContentSelect();
+                window.applyDiscount = () => {
+                    let g = document.getElementById('discountGrade').value;
+                    let s = document.getElementById('discountSection').value;
+                    let idx = parseInt(document.getElementById('discountContent').value);
+                    let percent = parseInt(document.getElementById('discountPercent').value);
+                    if(idx >= 0 && percent >= 0 && percent <= 100 && DB.contents[g][s][idx]) {
+                        DB.contents[g][s][idx].discount = percent;
+                        save();
+                        toast(`تخفیف ${percent}% اعمال شد`);
+                        loadAdminTab('discounts');
+                    } else toast('نامعتبر', true);
+                };
+                let discHtml = ' <th>محصول</th><th>تخفیف</th><th></th> ';
+                let hasDisc = false;
+                for(let g of DB.grades) for(let s of DB.sections) if(DB.contents[g]?.[s]) DB.contents[g][s].forEach((c, idx) => {
+                    if(c.discount > 0) {
+                        hasDisc = true;
+                        discHtml += `<tr><td>${c.title}</td><td>${c.discount}%</td><td><button class="btn-danger" onclick="removeDiscount('${g}','${s}',${idx})">حذف</button></td></tr>`;
+                    }
+                });
+                discHtml += '</table>';
+                if(!hasDisc) discHtml = '<div class="empty-state" style="padding:20px;">هیچ تخفیفی ندارد</div>';
+                document.getElementById('discountsList').innerHTML = discHtml;
+                window.removeDiscount = (g,s,idx) => { DB.contents[g][s][idx].discount = 0; save(); loadAdminTab('discounts'); toast('تخفیف حذف شد'); };
+            }
+            else if(tab === 'subjects') {
+                contentDiv.innerHTML = `<div><div style="display:flex;gap:8px;margin-bottom:16px;"><input type="text" id="newSubject" placeholder="درس جدید" style="flex:1;"><button class="btn-success" onclick="addNewSubject()">➕ افزودن</button></div><div id="subjectsList" style="display:flex;flex-wrap:wrap;gap:8px;"></div></div>`;
+                let subjectsHtml = DB.subjects.map((s, idx) => `<span style="background:var(--white);padding:6px 14px;border-radius:50px;">${s} <button class="btn-danger" onclick="removeSubject(${idx})" style="padding:2px 8px;margin-right:6px;">✖</button></span>`).join('');
+                document.getElementById('subjectsList').innerHTML = subjectsHtml;
+                window.addNewSubject = () => { let newSub = document.getElementById('newSubject').value; if(newSub && !DB.subjects.includes(newSub)) { DB.subjects.push(newSub); save(); loadAdminTab('subjects'); toast('درس اضافه شد'); document.getElementById('newSubject').value = ''; } else toast('تکراری', true); };
+                window.removeSubject = (idx) => { if(confirm('حذف شود؟')) { DB.subjects.splice(idx,1); save(); loadAdminTab('subjects'); toast('درس حذف شد'); } };
+            }
+            else if(tab === 'gallery') {
+                contentDiv.innerHTML = `<div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"><input type="text" id="gUrl" placeholder="آدرس تصویر" style="flex:1;"><select id="gType"><option>image</option><option>gif</option></select><input type="text" id="gCaption" placeholder="عنوان"><button class="btn-success" onclick="addGalleryAdmin()">➕ افزودن</button></div><div id="galleryListAdmin"></div></div>`;
+                renderGalleryList();
+                window.renderGalleryList = () => { 
+                    if(DB.gallery.length === 0) document.getElementById('galleryListAdmin').innerHTML = '<div class="empty-state" style="padding:20px;">گالری خالی است</div>';
+                    else document.getElementById('galleryListAdmin').innerHTML = DB.gallery.map((g,idx) => `<div class="user-row"><img src="${g.url}" style="width:50px;height:40px;object-fit:cover;border-radius:10px;"> <span>${g.caption}</span> <button class="btn-danger" onclick="deleteGalleryAdmin(${idx})" style="margin-right:auto;">🗑</button></div>`).join('');
+                };
+                window.addGalleryAdmin = () => { let url = document.getElementById('gUrl').value, type = document.getElementById('gType').value, cap = document.getElementById('gCaption').value; if(url) { DB.gallery.push({ id: 'g'+Date.now(), type, url, caption: cap || 'بدون عنوان', likes: 0, date: new Date().toLocaleDateString('fa-IR') }); save(); renderGalleryList(); updateAdminStats(); toast('اضافه شد'); document.getElementById('gUrl').value = ''; document.getElementById('gCaption').value = ''; } else toast('آدرس الزامی است', true); };
+                window.deleteGalleryAdmin = (idx) => { if(confirm('حذف شود؟')) { DB.gallery.splice(idx,1); save(); renderGalleryList(); updateAdminStats(); toast('حذف شد'); } };
+                renderGalleryList();
+            }
+            else if(tab === 'settings') {
+                contentDiv.innerHTML = `
+                    <div><h3>🔐 تغییر رمز</h3><input type="password" id="newAdminPass" placeholder="رمز جدید"><button class="btn-warning" onclick="changeAdminPassAdmin()" style="margin-top:8px;">تغییر</button></div>
+                    <hr style="margin:16px 0;">
+                    <div><button class="btn-danger" onclick="resetAllDataAdmin()">⚠️ بازنشانی کامل</button><button class="btn-outline" onclick="exportFullDatabase()" style="margin-right:8px;">📥 بکاپ</button><button class="btn-outline" onclick="importDatabase()">📤 بازیابی</button><input type="file" id="importFile" style="display:none;"></div>
+                `;
+                window.changeAdminPassAdmin = () => { let p = document.getElementById('newAdminPass').value; if(p) { DB.adminPass = p; save(); toast('رمز تغییر کرد'); document.getElementById('newAdminPass').value = ''; } };
+                window.resetAllDataAdmin = () => { if(confirm('همه چیز پاک می‌شود! مطمئن هستید؟')) { localStorage.clear(); toast('پاک شد. صفحه رفرش می‌شود'); setTimeout(()=>location.reload(),1500); } };
+                window.exportFullDatabase = () => { let dataStr = JSON.stringify(DB, null, 2); let link = document.createElement('a'); link.setAttribute('href', 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr)); link.setAttribute('download', `drsyar_backup_${Date.now()}.json`); link.click(); toast('بکاپ گرفته شد'); };
+                window.importDatabase = () => { document.getElementById('importFile').click(); };
+                document.getElementById('importFile').onchange = (e) => { let file = e.target.files[0]; if(file) { let reader = new FileReader(); reader.onload = (e) => { try { let imported = JSON.parse(e.target.result); if(imported.grades && imported.users) { DB = imported; save(); toast('بازیابی موفق. صفحه رفرش می‌شود'); setTimeout(()=>location.reload(),1500); } else toast('فایل نامعتبر', true); } catch(err) { toast('خطا', true); } }; reader.readAsText(file); } };
+            }
+        }
+        
+        updateAdminStats();
+        loadAdminTab('dashboard');
+        
+        document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadAdminTab(btn.dataset.tab);
+            };
+        });
+        document.querySelector('.admin-tab-btn').classList.add('active');
+    }
+    
+    load();
+    render();
+</script>
+</body>
+</html>
