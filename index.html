@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Arianet | شبکه اجتماعی آریان</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #fafafa;
+            padding-bottom: 70px;
+        }
+        .header {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 1px solid #dbdbdb;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f09433, #d62976);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .add-btn {
+            background: #0095f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .post-form {
+            background: white;
+            margin: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #dbdbdb;
+            display: none;
+        }
+        .post-form input, .post-form textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .post-form button {
+            background: #0095f6;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .post {
+            background: white;
+            margin: 12px;
+            border-radius: 12px;
+            border: 1px solid #dbdbdb;
+            overflow: hidden;
+        }
+        .post-header {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #f09433, #d62976);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .post-name {
+            font-weight: bold;
+        }
+        .post-image {
+            width: 100%;
+            background: #efefef;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8e8e8e;
+        }
+        .post-image img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+        .post-actions {
+            padding: 12px;
+            display: flex;
+            gap: 16px;
+        }
+        .like-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .post-content {
+            padding: 0 12px 8px 12px;
+        }
+        .post-likes {
+            font-weight: bold;
+            padding: 0 12px 8px 12px;
+        }
+        .comment-section {
+            padding: 8px 12px 12px 12px;
+            border-top: 1px solid #efefef;
+        }
+        .comment-input {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .comment-input input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            outline: none;
+        }
+        .comment-input button {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .empty-state {
+            text-align: center;
+            color: #8e8e8e;
+            padding: 40px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #8e8e8e;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">✨ Arianet</div>
+    <button class="add-btn" onclick="toggleForm()">+ جدید</button>
+</div>
+
+<div class="post-form" id="postForm">
+    <input type="text" id="userName" placeholder="نام شما" value="آریان">
+    <textarea id="postContent" placeholder="چه خبر؟..." rows="3"></textarea>
+    <input type="text" id="imageUrl" placeholder="لینک عکس (مثل: https://example.com/photo.jpg)">
+    <button onclick="createPost()">📤 انتشار</button>
+</div>
+
+<div id="postsContainer">
+    <div class="loading">⏳ در حال بارگذاری...</div>
+</div>
+
+<script>
+    // ==================== 👇 این دو خط رو حتماً عوض کن 👇 ====================
+    const SUPABASE_URL = 'https://zbwlotzpcydfykijbgmt.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpid2xvdHpwY3lkZnlraWpiZ210Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyODg0NzEsImV4cCI6MjA5Njg2NDQ3MX0.gMKs5UV3oTU9c0FDCR4Wyr40g7SjhQFDn8Ssjsfzcr0'
+    // ====================================================================
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let allPosts = [];
+
+    function toggleForm() {
+        const form = document.getElementById('postForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function loadPosts() {
+        const container = document.getElementById('postsContainer');
+        container.innerHTML = '<div class="loading">⏳ در حال بارگذاری...</div>';
+        
+        const { data, error } = await supabase
+            .from('posts')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) {
+            console.error('خطا:', error);
+            container.innerHTML = `<div class="empty-state">❌ خطا در بارگذاری: ${error.message}</div>`;
+            return;
+        }
+        
+        allPosts = data || [];
+        renderPosts();
+    }
+
+    async function likePost(postId, currentLikes) {
+        const { error } = await supabase
+            .from('posts')
+            .update({ likes: (currentLikes || 0) + 1 })
+            .eq('id', postId);
+        
+        if (error) {
+            alert('خطا در لایک کردن: ' + error.message);
+        } else {
+            loadPosts();
+        }
+    }
+
+    async function createPost() {
+        const userName = document.getElementById('userName').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+        const imageUrl = document.getElementById('imageUrl').value.trim();
+        
+        if (!content) {
+            alert('لطفاً متن پست رو بنویس');
+            return;
+        }
+        
+        const newPost = {
+            content: content,
+            user_name: userName || 'کاربر',
+            likes: 0
+        };
+        
+        if (imageUrl) {
+            newPost.image_url = imageUrl;
+        }
+        
+        const { error } = await supabase.from('posts').insert([newPost]);
+        
+        if (error) {
+            alert('خطا در انتشار: ' + error.message);
+        } else {
+            document.getElementById('postContent').value = '';
+            document.getElementById('imageUrl').value = '';
+            toggleForm();
+            loadPosts();
+        }
+    }
+
+    function renderPosts() {
+        const container = document.getElementById('postsContainer');
+        
+        if (!allPosts.length) {
+            container.innerHTML = '<div class="empty-state">✨ پستی وجود ندارد. اولین پست رو بساز!</div>';
+            return;
+        }
+        
+        container.innerHTML = allPosts.map(post => `
+            <div class="post">
+                <div class="post-header">
+                    <div class="avatar">${(post.user_name || 'A')[0].toUpperCase()}</div>
+                    <div class="post-name">${escapeHtml(post.user_name || 'کاربر')}</div>
+                </div>
+                ${post.image_url ? `<div class="post-image"><img src="${escapeHtml(post.image_url)}" alt="پست تصویری" onerror="this.src='https://placehold.co/400x300?text=❌+عکس+بارگذاری+نشد'"></div>` : 
+                                    `<div class="post-image">📝 پست متنی</div>`}
+                <div class="post-content">
+                    <p>${escapeHtml(post.content)}</p>
+                </div>
+                <div class="post-likes">
+                    ❤️ ${post.likes || 0} لایک
+                </div>
+                <div class="post-actions">
+                    <button class="like-btn" onclick="likePost(${post.id}, ${post.likes || 0})">❤️ لایک</button>
+                </div>
+                <div class="comment-section">
+                    <div class="comment-input">
+                        <input type="text" placeholder="نظر بده..." id="comment-${post.id}">
+                        <button onclick="addComment(${post.id})">ارسال</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function addComment(postId) {
+        const input = document.getElementById(`comment-${postId}`);
+        if (input.value.trim()) {
+            alert('💬 کامنت ثبت شد! (نسخه ساده)');
+            input.value = '';
+        } else {
+            alert('لطفاً متن نظر رو بنویس');
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    loadPosts();
+</script>
+</body>
+</html>
