@@ -1,0 +1,8 @@
+{
+  "users": [
+    {"id": 1, "username": "admin", "password": "123", "role": "admin", "coins": 10000, "avatar": "👑"}
+  ],
+  "contents": [
+    {"id": 1, "grade": "هفتم", "title": "جزوه ریاضی", "desc": "آموزش کامل", "price": 50, "teacher": "استاد احمدی"}
+  ]
+}
