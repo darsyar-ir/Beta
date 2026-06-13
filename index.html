@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درسیار | همراه همیشگی درس</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Vazir', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 40px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 3em;
+            margin-bottom: 5px;
+        }
+
+        .version {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .grade-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .grade-btn {
+            padding: 14px 35px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            background: #e8e8e8;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .grade-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+
+        .subjects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 35px;
+        }
+
+        .subject-btn {
+            padding: 10px 24px;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .subject-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .files {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .file-card {
+            background: white;
+            padding: 22px;
+            border-radius: 24px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(102,126,234,0.2);
+        }
+
+        .file-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(102,126,234,0.2);
+        }
+
+        .file-type {
+            display: inline-block;
+            padding: 5px 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75em;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .file-card h3 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        }
+
+        .paid-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px;
+            border-radius: 16px;
+            font-size: 0.9em;
+            margin-top: 12px;
+        }
+
+        .admin-toggle {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px dashed #ddd;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .admin-panel {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f9f9ff;
+            border-radius: 25px;
+            display: none;
+        }
+
+        .admin-section {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .admin-section input, .admin-section select {
+            padding: 10px 15px;
+            margin: 8px 5px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .admin-section input:focus, .admin-section select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .admin-section button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 25px;
+            border-radius: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            padding: 12px 20px;
+            margin: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            width: 250px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            z-index: 2000;
+            display: none;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .file-card {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .grade-btn { padding: 10px 20px; font-size: 1em; }
+            .files { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📚 درسیار</h1>
+    <div class="version">نسخه 0.61 | جزوه، نمونه سوال، کتاب | پایه هفتم، هشتم، نهم</div>
+
+    <div class="grade-selector">
+        <button class="grade-btn" data-grade="7">🎓 پایه هفتم</button>
+        <button class="grade-btn" data-grade="8">📖 پایه هشتم</button>
+        <button class="grade-btn" data-grade="9">⭐ پایه نهم</button>
+    </div>
+
+    <div id="subjectsContainer" class="subjects"></div>
+    <div id="filesContainer" class="files"></div>
+
+    <div class="admin-toggle">
+        <button class="admin-btn" onclick="toggleAdmin()">🔧 پنل مدیریت</button>
+    </div>
+    <div id="adminPanel" class="admin-panel"></div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+    // 🔐 ==================== تنظیمات توکن گیت‌هاب ====================
+    // 👇 فقط همین ۳ خط رو عوض کن 👇
+    const GITHUB_TOKEN = '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'  // توکن گیت‌هابت رو اینجا بذار
+    const REPO_OWNER = 'darsyar-ir'     // اسم کاربری گیت‌هات
+    const REPO_NAME = 'beta';                     // اسم ریپازیتوری
+    // ================================================================
+    
+    const ADMIN_PASSWORD = 'khodeto123';  // رمز پنل ادمین (عوضش کن)
+    const FILE_PATH = 'db.json';
+    const BRANCH = 'main';
+
+    let db = null;
+    let currentGrade = 7;
+    let currentSubject = null;
+    let sha = null;
+
+    function showToast(msg, isError = false) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.style.background = isError ? 'linear-gradient(135deg, #e74c3c, #c0392b)' : 'linear-gradient(135deg, #27ae60, #2ecc71)';
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2500);
+    }
+
+    async function loadDB() {
+        try {
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            if(response.status === 404) {
+                db = {
+                    grades: [7, 8, 9],
+                    subjects: [
+                        { id: "riazi7", name: "ریاضی", grade: 7, icon: "📐" },
+                        { id: "olom7", name: "علوم", grade: 7, icon: "🔬" },
+                        { id: "farsi7", name: "فارسی", grade: 7, icon: "📖" },
+                        { id: "riazi8", name: "ریاضی", grade: 8, icon: "📐" },
+                        { id: "olom8", name: "علوم", grade: 8, icon: "🔬" },
+                        { id: "riazi9", name: "ریاضی", grade: 9, icon: "📐" },
+                        { id: "olom9", name: "علوم", grade: 9, icon: "🔬" }
+                    ],
+                    files: []
+                };
+                sha = null;
+                await saveDB();
+                showToast('دیتابیس اولیه ساخته شد ✅');
+                return;
+            }
+            
+            const data = await response.json();
+            sha = data.sha;
+            const content = atob(data.content);
+            db = JSON.parse(content);
+            showToast('دیتابیس بارگذاری شد ✅');
+        } catch(error) {
+            console.error(error);
+            showToast('خطا در لود دیتابیس ❌', true);
+            db = { grades: [7,8,9], subjects: [], files: [] };
+        }
+        renderSubjects();
+    }
+
+    async function saveDB() {
+        try {
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(db, null, 2))));
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+            const body = {
+                message: `📝 درسیار آپدیت شد - ${new Date().toLocaleString('fa-IR')}`,
+                content: content,
+                branch: BRANCH
+            };
+            if(sha) body.sha = sha;
+            
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            
+            const result = await response.json();
+            if(result.content) sha = result.content.sha;
+            showToast('💾 ذخیره شد روی گیت‌هاب');
+            return true;
+        } catch(e) {
+            showToast('خطا در ذخیره سازی ❌', true);
+            return false;
+        }
+    }
+
+    function renderSubjects() {
+        if(!db) return;
+        const subjects = db.subjects.filter(s => s.grade == currentGrade);
+        const container = document.getElementById('subjectsContainer');
+        if(!container) return;
+        
+        if(subjects.length === 0) {
+            container.innerHTML = '<div style="text-align:center; color:#999;">هنوز درسی اضافه نشده</div>';
+            return;
+        }
+        
+        container.innerHTML = subjects.map(s => `
+            <button class="subject-btn ${currentSubject?.id === s.id ? 'active' : ''}" onclick="selectSubject('${s.id}')">
+                ${s.icon || '📘'} ${s.name}
+            </button>
+        `).join('');
+    }
+
+    window.selectSubject = function(subjectId) {
+        currentSubject = db.subjects.find(s => s.id === subjectId);
+        renderSubjects();
+        renderFiles();
+    }
+
+    function renderFiles() {
+        if(!currentSubject || !db) return;
+        const files = db.files.filter(f => f.subjectId === currentSubject.id);
+        const container = document.getElementById('filesContainer');
+        if(!container) return;
+        
+        if(files.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:50px; color:#999;">📭 هنوز فایلی برای این درس اضافه نشده</div>';
+            return;
+        }
+        
+        container.innerHTML = files.map(f => `
+            <div class="file-card">
+                <span class="file-type">📄 ${f.type}</span>
+                <h3>${f.title}</h3>
+                ${f.isPaid ? `
+                    <div class="paid-badge">
+                        🔒 <strong>کد: ${f.code}</strong><br>
+                        📱 ارسال به ${f.platform === 'ita' ? 'ایتا' : f.platform === 'bale' ? 'بله' : 'روبیکا'} @ostad_my
+                        <br>
+                        <button onclick="alert('کد ${f.code} رو به آیدی @ostad_my در ${f.platform === 'ita' ? 'ایتا' : f.platform === 'bale' ? 'بله' : 'روبیکا'} بفرست تا فایل رو برات بفرستم 💎')" class="download-btn" style="background:linear-gradient(135deg,#f39c12,#e67e22); margin-top:12px;">💰 دریافت فایل</button>
+                    </div>
+                ` : `
+                    <a href="${f.link}" class="download-btn" target="_blank">📥 دانلود رایگان</a>
+                `}
+            </div>
+        `).join('');
+    }
+
+    let isAdminOpen = false;
+    function toggleAdmin() {
+        isAdminOpen = !isAdminOpen;
+        const panel = document.getElementById('adminPanel');
+        if(isAdminOpen) {
+            panel.style.display = 'block';
+            panel.innerHTML = `
+                <div class="login-box">
+                    <h3>🔐 ورود به پنل مدیریت</h3>
+                    <input type="password" id="adminPassInput" placeholder="رمز مدیریت">
+                    <button onclick="checkAdminLogin()">ورود</button>
+                </div>
+            `;
+        } else {
+            panel.style.display = 'none';
+        }
+    }
+
+    window.checkAdminLogin = function() {
+        const pass = document.getElementById('adminPassInput').value;
+        if(pass === ADMIN_PASSWORD) {
+            renderAdminDashboard();
+        } else {
+            showToast('رمز اشتباه است ❌', true);
+        }
+    }
+
+    function renderAdminDashboard() {
+        const panel = document.getElementById('adminPanel');
+        panel.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="color:#667eea;">🛠️ داشبورد مدیریت</h2>
+                <button onclick="closeAdmin()" style="background:#e74c3c; padding:8px 20px;">❌ بستن</button>
+            </div>
+            
+            <div class="admin-section">
+                <h3>➕ اضافه کردن درس جدید</h3>
+                <input type="text" id="newSubjectName" placeholder="نام درس (مثال: ریاضی)" style="width:200px;">
+                <input type="text" id="newSubjectIcon" placeholder="آیکون (مثال: 📐)" style="width:80px;">
+                <select id="newSubjectGrade">
+                    <option value="7">پایه هفتم</option>
+                    <option value="8">پایه هشتم</option>
+                    <option value="9">پایه نهم</option>
+                </select>
+                <button onclick="addSubject()">➕ اضافه کن</button>
+            </div>
+            
+            <div class="admin-section">
+                <h3>🗑️ حذف درس</h3>
+                <select id="deleteSubjectSelect" style="width:250px;"></select>
+                <button onclick="deleteSubject()">🗑️ حذف کن</button>
+            </div>
+            
+            <div class="admin-section">
+                <h3>📤 افزودن فایل (جزوه/نمونه سوال/کتاب)</h3>
+                <input type="text" id="fileTitle" placeholder="عنوان فایل" style="width:250px;">
+                <select id="fileType">
+                    <option value="جزوه">📗 جزوه</option>
+                    <option value="نمونه سوال">📝 نمونه سوال</option>
+                    <option value="کتاب">📘 کتاب</option>
+                </select>
+                <select id="fileSubject" style="width:200px;"></select><br>
+                <input type="text" id="fileLink" placeholder="لینک دانلود (برای فایل رایگان)" style="width:400px;">
+                <label style="display:block; margin:10px 0;">
+                    <input type="checkbox" id="isPaid"> 🔒 این فایل پولی است
+                </label>
+                <div id="paidOptionsAdmin" style="display:none; margin-top:10px;">
+                    <input type="text" id="fileCode" placeholder="کد فایل (مثال: math-01)" style="width:200px;">
+                    <select id="filePlatform">
+                        <option value="ita">📱 ایتا</option>
+                        <option value="bale">💬 بله</option>
+                        <option value="rubika">🎨 روبیکا</option>
+                    </select>
+                </div>
+                <button onclick="addFile()">💾 ذخیره فایل</button>
+            </div>
+            
+            <div class="admin-section">
+                <h3>🗑️ حذف فایل</h3>
+                <select id="deleteFileSelect" style="width:300px;"></select>
+                <button onclick="deleteFile()">حذف کن</button>
+            </div>
+            
+            <div class="admin-section">
+                <h3>📊 آمار</h3>
+                <p>📚 تعداد دروس: ${db.subjects.length}</p>
+                <p>📄 تعداد فایل‌ها: ${db.files.length}</p>
+                <button onclick="refreshStats()">🔄 بروزرسانی</button>
+            </div>
+        `;
+        
+        populateSelects();
+        
+        const isPaidCheck = document.getElementById('isPaid');
+        if(isPaidCheck) {
+            isPaidCheck.addEventListener('change', (e) => {
+                const paidOpts = document.getElementById('paidOptionsAdmin');
+                if(paidOpts) paidOpts.style.display = e.target.checked ? 'block' : 'none';
+            });
+        }
+    }
+
+    window.closeAdmin = function() {
+        document.getElementById('adminPanel').style.display = 'none';
+        isAdminOpen = false;
+    }
+
+    window.refreshStats = function() {
+        renderAdminDashboard();
+    }
+
+    function populateSelects() {
+        if(!db) return;
+        const subjectSelect = document.getElementById('fileSubject');
+        const deleteSubject = document.getElementById('deleteSubjectSelect');
+        const deleteFile = document.getElementById('deleteFileSelect');
+        
+        const subjectOptions = db.subjects.map(s => `<option value="${s.id}">${s.icon || '📘'} ${s.name} - پایه ${s.grade}</option>`).join('');
+        if(subjectSelect) subjectSelect.innerHTML = subjectOptions;
+        if(deleteSubject) deleteSubject.innerHTML = '<option value="">انتخاب درس...</option>' + subjectOptions;
+        if(deleteFile) deleteFile.innerHTML = '<option value="">انتخاب فایل...</option>' + 
+            db.files.map(f => `<option value="${f.id}">${f.title} - ${f.type}</option>`).join('');
+    }
+
+    window.addSubject = async function() {
+        const name = document.getElementById('newSubjectName').value;
+        const icon = document.getElementById('newSubjectIcon').value || '📘';
+        const grade = parseInt(document.getElementById('newSubjectGrade').value);
+        if(!name) { showToast('اسم درس رو بنویس', true); return; }
+        
+        const id = name + grade + Date.now();
+        db.subjects.push({ id, name, grade, icon });
+        await saveDB();
+        renderSubjects();
+        renderAdminDashboard();
+        showToast(`درس ${name} اضافه شد ✅`);
+        document.getElementById('newSubjectName').value = '';
+        document.getElementById('newSubjectIcon').value = '';
+    }
+
+    window.deleteSubject = async function() {
+        const id = document.getElementById('deleteSubjectSelect').value;
+        if(!id) { showToast('درسی رو انتخاب کن', true); return; }
+        if(confirm('از حذف این درس مطمئنی؟ فایل‌هاش هم پاک میشن')) {
+            db.subjects = db.subjects.filter(s => s.id !== id);
+            db.files = db.files.filter(f => f.subjectId !== id);
+            await saveDB();
+            if(currentSubject?.id === id) currentSubject = null;
+            renderSubjects();
+            renderAdminDashboard();
+            showToast('درس حذف شد ✅');
+        }
+    }
+
+    window.addFile = async function() {
+        const title = document.getElementById('fileTitle').value;
+        const type = document.getElementById('fileType').value;
+        const subjectId = document.getElementById('fileSubject').value;
+        const link = document.getElementById('fileLink').value;
+        const isPaid = document.getElementById('isPaid').checked;
+        const code = document.getElementById('fileCode')?.value;
+        const platform = document.getElementById('filePlatform')?.value;
+        
+        if(!title || !subjectId) { showToast('عنوان و درس رو کامل کن', true); return; }
+        if(!isPaid && !link) { showToast('لینک دانلود رو وارد کن', true); return; }
+        if(isPaid && !code) { showToast('کد فایل رو وارد کن', true); return; }
+        
+        const subject = db.subjects.find(s => s.id === subjectId);
+        db.files.push({
+            id: Date.now().toString(),
+            title, type, subjectId,
+            grade: subject?.grade,
+            isPaid,
+            link: isPaid ? '' : link,
+            code: isPaid ? code : '',
+            platform: isPaid ? platform : ''
+        });
+        
+        await saveDB();
+        renderFiles();
+        renderAdminDashboard();
+        showToast('فایل اضافه شد ✅');
+        
+        document.getElementById('fileTitle').value = '';
+        document.getElementById('fileLink').value = '';
+        if(document.getElementById('fileCode')) document.getElementById('fileCode').value = '';
+    }
+
+    window.deleteFile = async function() {
+        const id = document.getElementById('deleteFileSelect').value;
+        if(!id) { showToast('فایلی رو انتخاب کن', true); return; }
+        if(confirm('از حذف فایل مطمئنی؟')) {
+            db.files = db.files.filter(f => f.id !== id);
+            await saveDB();
+            renderFiles();
+            renderAdminDashboard();
+            showToast('فایل حذف شد ✅');
+        }
+    }
+
+    // راه‌اندازی اولیه
+    loadDB();
+    
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            currentGrade = parseInt(e.target.dataset.grade);
+            currentSubject = null;
+            document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            renderSubjects();
+            document.getElementById('filesContainer').innerHTML = '<div style="text-align:center; padding:50px;">✨ یک درس رو انتخاب کن...</div>';
+        });
+    });
+    document.querySelector('.grade-btn').classList.add('active');
+</script>
+</body>
+</html>
