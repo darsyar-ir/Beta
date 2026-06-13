@@ -1,0 +1,60 @@
+{
+  "7": {
+    "subjects": {
+      "ریاضی": {
+        "files": [
+          {
+            "name": "جزوه نمونه فصل 1",
+            "type": "جزوه",
+            "price": "free",
+            "downloadLink": "https://example.com/sample.pdf",
+            "productCode": ""
+          }
+        ]
+      },
+      "علوم": {
+        "files": []
+      },
+      "فارسی": {
+        "files": []
+      },
+      "هعی": {
+        "files": [
+          {
+            "name": "خیلی خوب",
+            "type": "جزوه",
+            "price": "free",
+            "downloadLink": "www.exsampel.com",
+            "productCode": ""
+          }
+        ]
+      }
+    }
+  },
+  "8": {
+    "subjects": {
+      "ریاضی": {
+        "files": []
+      },
+      "علوم": {
+        "files": []
+      },
+      "فارسی": {
+        "files": []
+      }
+    }
+  },
+  "9": {
+    "subjects": {
+      "ریاضی": {
+        "files": []
+      },
+      "علوم": {
+        "files": []
+      },
+      "فارسی": {
+        "files": []
+      }
+    }
+  }
+}
