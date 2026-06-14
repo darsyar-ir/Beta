@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>درسیار | نسخه کیهانی ۰.۶۳</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+            background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+            min-height: 100vh;
+            padding: 15px;
+            color: #f0f0f0;
+        }
+
+        .star {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(10, 20, 40, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 12px;
+        }
+
+        button {
+            background: rgba(30, 40, 60, 0.8);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 15px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.15s;
+        }
+
+        button:active { transform: scale(0.96); }
+
+        .grades {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .grade-card {
+            background: rgba(15, 25, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            width: 150px;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .grade-card:active { transform: scale(0.97); }
+        .grade-card h2 { font-size: 32px; }
+        .grade-7 { border-top: 3px solid #3b82f6; }
+        .grade-8 { border-top: 3px solid #10b981; }
+        .grade-9 { border-top: 3px solid #f59e0b; }
+
+        /* وبلاگ */
+        .blog-section {
+            margin: 40px 0 30px;
+            background: rgba(10, 20, 35, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .blog-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fbbf24;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .blog-post {
+            background: rgba(0,0,0,0.4);
+            border-radius: 24px;
+            padding: 18px;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .blog-post:hover { background: rgba(0,0,0,0.6); transform: translateY(-3px); }
+        .blog-post h3 { color: #fbbf24; margin-bottom: 10px; font-size: 1.3rem; }
+        .blog-post p { font-size: 13px; line-height: 1.5; opacity: 0.9; }
+        .blog-date { font-size: 11px; color: #94a3b8; margin-top: 10px; display: block; }
+        .read-more { background: none; border: 1px solid #fbbf24; margin-top: 12px; padding: 4px 12px; font-size: 11px; }
+
+        .panel, .admin-box, .modal-content {
+            background: rgba(10, 20, 35, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            padding: 6px 14px;
+        }
+        .tab.active {
+            background: rgba(100, 120, 200, 0.7);
+            color: white;
+        }
+
+        .subject {
+            background: rgba(20, 30, 50, 0.5);
+            border-radius: 20px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .subject-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 10px;
+            border-right: 3px solid #fbbf24;
+            padding-right: 12px;
+        }
+        .file-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .free-badge, .paid-badge {
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+        }
+        .free-badge { background: #10b981; }
+        .paid-badge { background: #f59e0b; }
+
+        /* امتیاز ستاره */
+        .rating {
+            display: flex;
+            gap: 5px;
+            direction: ltr;
+            margin: 8px 0;
+        }
+        .star {
+            font-size: 20px;
+            cursor: pointer;
+            color: #4b5563;
+            transition: 0.1s;
+            position: relative;
+            display: inline-block;
+        }
+        .star.active { color: #fbbf24; text-shadow: 0 0 5px #fbbf24; }
+        .avg-rating { font-size: 12px; margin-right: 10px; color: #fbbf24; }
+
+        /* نظرات */
+        .comments-section {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .comment {
+            background: rgba(0,0,0,0.3);
+            border-radius: 14px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .comment-user { color: #fbbf24; font-weight: bold; }
+        .comment-text { margin-top: 4px; }
+        .comment-date { font-size: 10px; color: #94a3b8; margin-top: 4px; }
+        .add-comment {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .add-comment input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+            border-radius: 40px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .notice-board {
+            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+            border-right: 3px solid #fbbf24;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            margin: 6px 0;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+            border-radius: 40px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .btn { background: #4f46e5; padding: 8px 18px; margin: 4px; }
+        .btn-green { background: #10b981; }
+        .btn-red { background: #ef4444; }
+        .btn-warning { background: #f59e0b; }
+        .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            z-index: 2100;
+            font-size: 13px;
+            animation: fadeOut 2.5s forwards;
+        }
+        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+
+        .hidden { display: none; }
+        .grades { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">🚀 درسیار <span>نسخه کیهانی ۰.۶۳</span></div>
+        <div><button onclick="showAdmin()">⚡ پنل ادمین</button></div>
+    </div>
+
+    <div id="mainPage">
+        <div class="grades" id="gradesList"></div>
+        <!-- وبلاگ در صفحه اصلی -->
+        <div class="blog-section" id="blogSection">
+            <div class="blog-title">📝 وبلاگ درسیار</div>
+            <div class="blog-grid" id="blogPosts"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="showAllPosts()" class="btn-sm" id="blogMoreBtn">مشاهده همه پست‌ها</button>
+            </div>
+        </div>
+    </div>
+    <div id="contentPage" class="hidden"></div>
+    <div id="adminPage" class="hidden"></div>
+</div>
+
+<div id="modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); justify-content:center; align-items:center; z-index:2000;"><div class="modal-content" style="max-width:400px; width:90%;"><h3>💫 خرید</h3><div id="modalInfo"></div><div id="modalBtns"></div><div id="modalMsg" class="hidden"><div id="modalCode" style="background:#0f172a; padding:12px; border-radius:16px; margin:12px 0; white-space:pre-wrap; font-size:12px;"></div><button class="btn" onclick="copyCode()">📋 کپی</button></div><button class="btn btn-gray" onclick="closeModal()">بستن</button></div></div>
+
+<script>
+    // =============== تنظیمات ===============
+    const BIN_ID = "6a2e83cff5f4af5e29efa0ec";
+    const API_KEY = "$2a$10$QiD9l/D7m8hTGNnFASLf2.n5VZe6yAIUolrrbDKirrpteGeBDGcwC";
+    
+    let admins = ["Admin1403"];
+    let DB = null;
+    let currentGrade = null, currentType = 'جزوه', currentProduct = null, adminLogged = false;
+    let noticeText = "🌟 به درسیار خوش آمدید!";
+
+    // وبلاگ
+    let blogPosts = [
+        { id: 1, title: "📚 ۱۰ روش مطالعه مؤثر", summary: "روش‌های مطالعه برای امتحانات...", content: "متن کامل مقاله...", date: "۱۴۰۳/۰۱/۱۵", image: "📖" },
+        { id: 2, title: "⭐ چگونه ریاضی را عالی شویم؟", summary: "تکنیک‌های جذاب یادگیری ریاضی...", content: "متن کامل مقاله ریاضی...", date: "۱۴۰۳/۰۱/۲۰", image: "📐" },
+        { id: 3, title: "🎯 برنامه ریزی کنکور", summary: "نکات طلایی برای موفقیت...", content: "متن کامل برنامه ریزی...", date: "۱۴۰۳/۰۱/۲۵", image: "🎯" }
+    ];
+
+    const MY_SOCIAL = {
+        bale: { name: "بله", id: "@Arian_A_Game", link: "https://ble.ir/Arian_A_Game" },
+        eitaa: { name: "ایتا", id: "@Arian_A_Game", link: "https://eitaa.com/Arian_A_Game" },
+        rubika: { name: "روبیکا", id: "@Arian_A_Gane", link: "https://rubika.ir/Arian_A_Gane" }
+    };
+
+    function showToast(msg, isErr) {
+        let t = document.createElement('div');
+        t.className = 'toast';
+        t.style.background = isErr ? '#ef4444' : '#10b981';
+        t.innerText = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2500);
+    }
+
+    async function loadData() {
+        try {
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`);
+            if (!res.ok) throw new Error();
+            let data = await res.json();
+            DB = data.record;
+            if (!DB["7"]) DB = { "7": {}, "8": {}, "9": {}, "notice": noticeText, "admins": admins, "ratings": {}, "comments": {} };
+            if (DB.notice) noticeText = DB.notice;
+            if (DB.admins) admins = DB.admins;
+            if (!DB.ratings) DB.ratings = {};
+            if (!DB.comments) DB.comments = {};
+            showToast('🌌 اتصال برقرار شد');
+        } catch(e) {
+            DB = { "7": {}, "8": {}, "9": {}, "notice": noticeText, "admins": admins, "ratings": {}, "comments": {} };
+            showToast('⚠️ حالت آفلاین', true);
+        }
+        showGrades();
+        renderBlog();
+    }
+
+    async function saveData() {
+        if (!adminLogged) return false;
+        DB.notice = noticeText;
+        DB.admins = admins;
+        try {
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                body: JSON.stringify(DB)
+            });
+            showToast('💾 ذخیره شد');
+            return true;
+        } catch(e) { showToast('❌ خطا در ذخیره', true); return false; }
+    }
+
+    function showGrades() {
+        let grades = [
+            {num:7, name:'هفتم', color:'#3b82f6'},
+            {num:8, name:'هشتم', color:'#10b981'},
+            {num:9, name:'نهم', color:'#f59e0b'}
+        ];
+        document.getElementById('gradesList').innerHTML = grades.map(g => `
+            <div class="grade-card grade-${g.num}" style="border-top-color:${g.color}" onclick="selectGrade(${g.num})">
+                <h2>پایه ${g.name}</h2>
+                <p>دوره اول</p>
+            </div>
+        `).join('');
+    }
+
+    function renderBlog() {
+        let container = document.getElementById('blogPosts');
+        if(!container) return;
+        let showPosts = blogPosts.slice(0, 3);
+        container.innerHTML = showPosts.map(p => `
+            <div class="blog-post">
+                <h3>${p.image || '📌'} ${p.title}</h3>
+                <p>${p.summary}</p>
+                <span class="blog-date">📅 ${p.date}</span>
+                <button class="read-more" onclick="viewPost(${p.id})">مطالعه بیشتر</button>
+            </div>
+        `).join('');
+    }
+
+    function viewPost(id) {
+        let post = blogPosts.find(p => p.id === id);
+        if(post) {
+            alert(`${post.title}\n\n${post.content}\n\n📅 تاریخ: ${post.date}`);
+        }
+    }
+
+    function showAllPosts() {
+        let allPosts = blogPosts.map(p => `${p.title}\n${p.summary}\n📅 ${p.date}\n━━━━━━━━━`).join('\n\n');
+        alert(`📝 تمام پست‌های وبلاگ:\n\n${allPosts}`);
+    }
+
+    function selectGrade(g) { currentGrade = g; currentType = 'جزوه'; document.getElementById('mainPage').classList.add('hidden'); renderContent(); }
+    
+    function renderContent() {
+        let html = `<div class="panel"><div class="notice-board">📢 <span id="noticeDisplay">${noticeText}</span>${adminLogged ? '<button class="btn-warning btn-sm" onclick="editNotice()">✏️ ویرایش</button>' : ''}</div><div class="tabs">
+            ${['جزوه','نمونه سوال','کتاب'].map(t => `<button class="tab ${currentType===t?'active':''}" onclick="changeType('${t}')">${t==='جزوه'?'📘':t==='نمونه سوال'?'📝':'📖'} ${t}</button>`).join('')}
+        </div><div id="subjectsDiv"></div><button class="btn btn-gray" onclick="backToMain()">🔙 بازگشت</button></div>`;
+        document.getElementById('contentPage').innerHTML = html;
+        document.getElementById('contentPage').classList.remove('hidden');
+        renderSubjects();
+    }
+
+    function renderSubjects() {
+        let container = document.getElementById('subjectsDiv');
+        let subjects = DB[currentGrade] || {};
+        let subjectNames = Object.keys(subjects);
+        if(subjectNames.length === 0) { container.innerHTML = '<p style="text-align:center;padding:40px;">🚀 درسی ثبت نشده</p>'; return; }
+        let html = '';
+        for(let sub of subjectNames) {
+            let files = subjects[sub].filter(f => f.type === currentType);
+            if(files.length === 0) continue;
+            html += `<div class="subject"><div class="subject-title">${sub}</div>`;
+            for(let idx in files) {
+                let f = files[idx];
+                let fileId = `${currentGrade}_${sub}_${currentType}_${idx}`;
+                let ratings = DB.ratings[fileId] || { avg: 0, count: 0, users: {} };
+                let avgStars = ratings.avg;
+                let userRating = ratings.users[getUserIP()] || 0;
+                let comments = DB.comments[fileId] || [];
+                html += `<div class="file-item">
+                    <div><strong>${f.name}</strong> <span class="${f.price==='free'?'free-badge':'paid-badge'}">${f.price==='free'?'رایگان':'💰 پولی'}</span></div>
+                    <div>${f.price==='free' ? `<button class="btn-sm" style="background:#3b82f6;" onclick="window.open('${f.link}','_blank')">📥 دانلود</button>` : `<button class="btn-sm" style="background:#f59e0b;" onclick='openBuy(${JSON.stringify(f)},"${sub}")'>🛒 خرید</button>`}</div>
+                </div>
+                <div class="rating">
+                    ${[1,2,3,4,5].map(s => `<span class="star ${s <= avgStars ? 'active' : ''}" data-rating="${s}" onclick="rateFile('${fileId}', ${s})">★</span>`).join('')}
+                    <span class="avg-rating">(${avgStars.toFixed(1)} - ${ratings.count} نظر)</span>
+                </div>
+                <div class="comments-section">
+                    <div id="comments-${fileId}">${comments.map(c => `<div class="comment"><span class="comment-user">${c.user}:</span><div class="comment-text">${c.text}</div><div class="comment-date">${c.date}</div></div>`).join('')}</div>
+                    <div class="add-comment">
+                        <input type="text" id="comment-input-${fileId}" placeholder="نظر خود را بنویسید...">
+                        <button class="btn-sm" onclick="addComment('${fileId}', '${sub}')">ارسال نظر</button>
+                    </div>
+                </div>`;
+            }
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+    }
+
+    function getUserIP() { return localStorage.getItem('user_id') || (() => { let id = 'user_' + Math.random().toString(36).substr(2,9); localStorage.setItem('user_id', id); return id; })(); }
+
+    async function rateFile(fileId, rating) {
+        if(!DB.ratings[fileId]) DB.ratings[fileId] = { avg: 0, count: 0, users: {} };
+        let uid = getUserIP();
+        if(DB.ratings[fileId].users[uid]) { showToast('شما قبلاً امتیاز داده‌اید', true); return; }
+        DB.ratings[fileId].users[uid] = rating;
+        let total = Object.values(DB.ratings[fileId].users).reduce((a,b)=>a+b,0);
+        let cnt = Object.keys(DB.ratings[fileId].users).length;
+        DB.ratings[fileId].avg = total / cnt;
+        DB.ratings[fileId].count = cnt;
+        if(adminLogged) await saveData();
+        renderSubjects();
+        showToast(`امتیاز ${rating} ستاره ثبت شد`);
+    }
+
+    async function addComment(fileId, subject) {
+        let input = document.getElementById(`comment-input-${fileId}`);
+        let text = input.value.trim();
+        if(!text) return showToast('متن نظر را وارد کنید', true);
+        let uid = getUserIP();
+        let comment = { user: uid.slice(0,8), text: text, date: new Date().toLocaleDateString('fa-IR') };
+        if(!DB.comments[fileId]) DB.comments[fileId] = [];
+        DB.comments[fileId].push(comment);
+        if(adminLogged) await saveData();
+        input.value = '';
+        renderSubjects();
+        showToast('نظر شما ثبت شد');
+    }
+
+    function changeType(t) { currentType = t; renderSubjects(); }
+    function backToMain() { document.getElementById('contentPage').classList.add('hidden'); document.getElementById('mainPage').classList.remove('hidden'); document.getElementById('adminPage').classList.add('hidden'); currentGrade = null; renderBlog(); }
+
+    function openBuy(file, subject) {
+        currentProduct = { ...file, subject };
+        document.getElementById('modalInfo').innerHTML = `<p><strong>${file.name}</strong><br>پایه ${currentGrade} - ${subject}<br>کد: <span style="background:#0f172a;padding:4px 12px;border-radius:40px;">${file.code || '----'}</span></p>`;
+        document.getElementById('modalBtns').innerHTML = Object.entries(MY_SOCIAL).map(([key,val]) => `<button style="background:#1e293b;border:1px solid #fbbf24;margin:5px;padding:6px 16px;border-radius:40px;" onclick="sendMsgTo('${key}')">📱 ${val.name}</button>`).join('');
+        document.getElementById('modalMsg').classList.add('hidden');
+        document.getElementById('modal').style.display = 'flex';
+    }
+    function sendMsgTo(platform) {
+        let social = MY_SOCIAL[platform];
+        let msg = `🚀 سفارش از درسیار\nپایه: ${currentGrade}\nدرس: ${currentProduct.subject}\nفایل: ${currentProduct.name}\nکد: ${currentProduct.code}\n\nآیدی من در ${social.name}: ${social.id}`;
+        document.getElementById('modalCode').innerText = msg;
+        document.getElementById('modalMsg').classList.remove('hidden');
+    }
+    function copyCode() { navigator.clipboard.writeText(document.getElementById('modalCode').innerText); showToast('✅ کپی شد'); }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    
+    async function editNotice() {
+        let newNotice = prompt('متن اعلان جدید:', noticeText);
+        if(newNotice && newNotice.trim()) {
+            noticeText = newNotice.trim();
+            if(adminLogged) await saveData();
+            if(document.getElementById('noticeDisplay')) document.getElementById('noticeDisplay').innerText = noticeText;
+            showToast('اعلان بروز شد');
+        }
+    }
+
+    // =============== پنل ادمین ===============
+    function showAdmin() {
+        document.getElementById('mainPage').classList.add('hidden');
+        document.getElementById('contentPage').classList.add('hidden');
+        renderAdmin();
+    }
+
+    function renderAdmin() {
+        if(!adminLogged) {
+            document.getElementById('adminPage').innerHTML = `<div class="admin-box"><h2>🔐 ورود</h2><input type="password" id="adminPass" placeholder="رمز"><button class="btn" onclick="loginAdmin()">ورود</button><button class="btn btn-gray" onclick="backToMain()">بازگشت</button></div>`;
+        } else {
+            let gradeOpts = `<option value="7">پایه7</option><option value="8">پایه8</option><option value="9">پایه9</option>`;
+            let adminsList = admins.map(a => `<li>${a} <button class="btn-red btn-sm" onclick="removeAdmin('${a}')">حذف</button></li>`).join('');
+            document.getElementById('adminPage').innerHTML = `<div class="admin-box">
+                <h2>🛸 پنل فرماندهی ۰.۶۳</h2>
+                <div class="notice-board">📢 اعلان: <span id="adminNotice">${noticeText}</span> <button class="btn-warning btn-sm" onclick="editNotice()">✏️ ویرایش</button></div>
+                <hr><h3>👥 مدیریت ادمین‌ها</h3>
+                <input type="text" id="newAdminPass" placeholder="رمز جدید"><button class="btn-green btn-sm" onclick="addAdmin()">➕ افزودن</button>
+                <ul style="margin:10px 0; list-style:none;">${adminsList}</ul>
+                <hr><h3>➕ درس جدید</h3><select id="newGrade">${gradeOpts}</select><input id="newSubject" placeholder="نام درس"><button class="btn-green btn-sm" onclick="addSubject()">ایجاد درس</button>
+                <hr><h3>📄 افزودن فایل</h3><select id="fileGrade" onchange="updateSubSelect()">${gradeOpts}</select><select id="fileSubject"></select>
+                <input id="fileName" placeholder="نام فایل"><select id="fileType"><option>جزوه</option><option>نمونه سوال</option><option>کتاب</option></select>
+                <select id="filePrice"><option value="free">رایگان</option><option value="paid">پولی</option></select>
+                <input id="fileLink" placeholder="لینک (رایگان)"><input id="fileCode" placeholder="کد (پولی)"><button class="btn-green btn-sm" onclick="addFile()">افزودن فایل</button>
+                <hr><h3>🗑️ حذف</h3><select id="delGrade" onchange="updateDelSubject()">${gradeOpts}</select><select id="delSubject"></select>
+                <select id="delFileSelect"><option value="">حذف فایل خاص</option></select><button class="btn-red btn-sm" onclick="deleteItem()">حذف</button>
+                <hr><h3>📝 مدیریت وبلاگ</h3>
+                <input id="blogTitle" placeholder="عنوان پست"><input id="blogSummary" placeholder="خلاصه"><input id="blogContent" placeholder="متن کامل"><button class="btn-green btn-sm" onclick="addBlogPost()">➕ افزودن پست</button>
+                <button class="btn btn-gray" style="margin-top:15px;" onclick="backToMain()">🚪 خروج</button>
+            </div>`;
+            updateSubSelect(); updateDelSubject();
+        }
+        document.getElementById('adminPage').classList.remove('hidden');
+    }
+
+    function loginAdmin() { let pass = document.getElementById('adminPass').value; if(admins.includes(pass)) { adminLogged = true; renderAdmin(); showToast('🚀 وارد شدی'); } else showToast('❌ رمز نادرست', true); }
+    async function addAdmin() { let newPass = document.getElementById('newAdminPass').value.trim(); if(!newPass) return; if(admins.includes(newPass)) return; admins.push(newPass); await saveData(); renderAdmin(); }
+    async function removeAdmin(adminPass) { if(adminPass === 'Admin1403') { showToast('ادمین اصلی قابل حذف نیست', true); return; } admins = admins.filter(a => a !== adminPass); await saveData(); renderAdmin(); }
+    function updateSubSelect() { let g = document.getElementById('fileGrade').value; let subs = Object.keys(DB[g] || {}); document.getElementById('fileSubject').innerHTML = subs.map(s => `<option value="${s}">${s}</option>`).join(''); }
+    async function updateDelSubject() { let g = document.getElementById('delGrade').value; let subs = Object.keys(DB[g] || {}); document.getElementById('delSubject').innerHTML = subs.map(s => `<option value="${s}">${s}</option>`).join(''); await updateDelFileList(); }
+    async function updateDelFileList() { let grade = document.getElementById('delGrade').value, subject = document.getElementById('delSubject').value, fileSelect = document.getElementById('delFileSelect'); if(!subject || !DB[grade] || !DB[grade][subject]) { fileSelect.innerHTML = '<option value="">حذف فایل خاص</option>'; return; } let files = DB[grade][subject]; fileSelect.innerHTML = '<option value="">--- حذف فایل خاص ---</option>' + files.map((f,idx) => `<option value="${idx}">${f.name} (${f.type})</option>`).join(''); }
+    async function deleteItem() { let grade = document.getElementById('delGrade').value, subject = document.getElementById('delSubject').value, fileIndex = document.getElementById('delFileSelect').value; if(!subject) return; if(fileIndex !== "") { if(confirm('حذف فایل؟')) { DB[grade][subject].splice(parseInt(fileIndex), 1); if(DB[grade][subject].length === 0) delete DB[grade][subject]; await saveData(); renderAdmin(); } } else { if(confirm(`حذف کامل درس "${subject}"؟`)) { delete DB[grade][subject]; await saveData(); renderAdmin(); } } }
+    async function addSubject() { let grade = document.getElementById('newGrade').value, name = document.getElementById('newSubject').value.trim(); if(!name) return; if(!DB[grade]) DB[grade] = {}; if(DB[grade][name]) return; DB[grade][name] = []; await saveData(); renderAdmin(); }
+    async function addFile() { let grade = document.getElementById('fileGrade').value, subject = document.getElementById('fileSubject').value, name = document.getElementById('fileName').value.trim(), type = document.getElementById('fileType').value, price = document.getElementById('filePrice').value, link = document.getElementById('fileLink').value, code = document.getElementById('fileCode').value; if(!name || !subject) return; if(!DB[grade][subject]) DB[grade][subject] = []; DB[grade][subject].push({ name, type, price, link: price==='free'?link:'', code: price==='paid'?(code||Math.random().toString(36).substr(2,8)):'' }); await saveData(); renderAdmin(); }
+    function addBlogPost() { let title = document.getElementById('blogTitle').value, summary = document.getElementById('blogSummary').value, content = document.getElementById('blogContent').value; if(!title) return; blogPosts.push({ id: Date.now(), title, summary, content, date: new Date().toLocaleDateString('fa-IR'), image: '📌' }); renderBlog(); showToast('پست اضافه شد'); document.getElementById('blogTitle').value = ''; document.getElementById('blogSummary').value = ''; document.getElementById('blogContent').value = ''; }
+
+    for(let i=0;i<80;i++) { let star = document.createElement('div'); star.classList.add('star'); let size = Math.random()*2+1; star.style.width = size+'px'; star.style.height = size+'px'; star.style.left = Math.random()*100+'%'; star.style.top = Math.random()*100+'%'; star.style.opacity = Math.random()*0.6+0.2; star.style.animation = `twinkle ${Math.random()*3+2}s infinite alternate`; document.body.appendChild(star); }
+    const styleStar = document.createElement('style'); styleStar.textContent = `@keyframes twinkle { 0% { opacity: 0.2; } 100% { opacity: 0.8; } }`; document.head.appendChild(styleStar);
+    loadData();
+</script>
+</body>
+</html>
